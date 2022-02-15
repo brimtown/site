@@ -1,16 +1,11 @@
 import React from 'react';
 import styled, { keyframes } from 'styled-components';
 import Header from '../components/Header';
-import homepage from '../assets/images/HomepageBackground.jpg';
 import Ball from '../components/Ball';
 import Layout from '../components/Layout';
 import Grid from '../components/Grid';
-import FullScreen from '../components/FullScreen';
+import FullScreen, { Container } from '../components/FullScreen';
 import theme from '../theme';
-
-interface HomepageWrapperProps {
-  backgroundImage: string;
-}
 
 const FadeIn = keyframes`
   from {
@@ -24,32 +19,18 @@ const FadeIn = keyframes`
   }
 `;
 
-const HomepageWrapper = styled(FullScreen)<HomepageWrapperProps>`
-  background-position: bottom;
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-image: url(${(props): string => props.backgroundImage});
-  position: relative;
-
-  ${(props): string => props.theme.mediaQueries.medium} {
-    background-position: right;
-    background-size: auto 100vh;
-  }
-`;
-
 const HomepageGrid = styled(Grid)`
   min-height: inherit;
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 `;
 
 const BodyText = styled.div`
-  opacity: 0;
-  font-size: 1.75rem;
-  font-family: ${(props): string => props.theme.fonts.sectra};
-  line-height: 2.25rem;
-  animation: ${FadeIn} ease-in 800ms both;
+  font-size: 1.5rem;
+  font-family: ${(props): string => props.theme.fonts.america};
+  line-height: 2rem;
 
   ${(props): string => props.theme.mediaQueries.small} {
     font-size: 2.5rem;
@@ -71,33 +52,18 @@ const BodyText = styled.div`
 `;
 
 const HomepageLink = styled.a`
-  color: ${(props): string => props.theme.colors.cream};
-  font-family: ${(props): string => props.theme.fonts.americaExtended};
-  font-size: 1.5rem;
-  font-weight: 200;
-  transition: filter 300ms ease;
+  color: ${(props): string => props.theme.colors.black};
+  background-color: ${(props): string => props.theme.colors.cream};
   text-decoration: underline;
+  transition: filter 100ms ease-out;
 
   :hover {
     filter: brightness(115%);
-  }
-
-  ${(props): string => props.theme.mediaQueries.small} {
-    font-size: 2rem;
-  }
-
-  ${(props): string => props.theme.mediaQueries.xlarge} {
-    font-size: calc(1vw + 2rem);
   }
 `;
 
 const Footer = styled.div`
   padding-bottom: 1.5rem;
-  transition: transform 200ms ease-out;
-
-  :hover {
-    transform: translate3d(0px, -3px, 0px);
-  }
 
   ${(props): string => props.theme.mediaQueries.small} {
     padding-bottom: 0;
@@ -106,8 +72,7 @@ const Footer = styled.div`
 
 const EmailText = styled.a`
   color: ${(props): string => props.theme.colors.black};
-  text-decoration: none;
-  font-family: ${(props): string => props.theme.fonts.americaExtended};
+  transition: filter 100ms ease-out;
   font-size: 1rem;
 
   ${(props): string => props.theme.mediaQueries.small} {
@@ -121,8 +86,9 @@ const BodyParagraph = styled.p`
 
 const IndexPage: React.FC = () => (
   <Layout>
-    <HomepageWrapper backgroundImage={homepage}>
-      <Ball top={100} left={-20} delay={2000} />
+    <FullScreen />
+    <Container>
+      <Ball top={100} left={-200} delay={0} />
       <HomepageGrid>
         <Header color={theme.colors.black} />
         <BodyText>
@@ -144,7 +110,7 @@ const IndexPage: React.FC = () => (
           </EmailText>
         </Footer>
       </HomepageGrid>
-    </HomepageWrapper>
+    </Container>
   </Layout>
 );
 

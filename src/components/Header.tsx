@@ -6,12 +6,11 @@ const HeaderWrapper = styled.nav<Props>`
   display: flex;
   justify-content: space-between;
   margin-bottom: 1rem;
-  color: ${(props): string =>
-    props.color ? props.color : props.theme.colors.orange};
+  color: ${(props): string => props.theme.colors.black};
   font-size: 1.5rem;
   line-height: 1.1;
   letter-spacing: -1px;
-  font-family: ${(props): string => props.theme.fonts.americaExtended};
+  font-family: ${(props): string => props.theme.fonts.america};
 
   ${(props): string => props.theme.mediaQueries.small} {
     font-size: 2rem;

@@ -11,6 +11,7 @@ const List = styled.ul`
   padding-left: 0.5rem;
   margin-left: 1rem;
   margin-bottom: 1.5rem;
+  list-style-type: square;
 `;
 
 const Item = styled.li`
@@ -23,21 +24,19 @@ const Item = styled.li`
 `;
 
 const Link = styled(OutboundLink)`
-  color: ${(props): string => props.theme.colors.orange};
-  transition: color ${(props): string => props.theme.animations.fast};
-
-  :visited {
-    color: ${(props): string => props.theme.colors.burnt};
-  }
+  color: ${(props): string => props.theme.colors.black};
+  background-color: ${(props): string => props.theme.colors.cream};
+  text-decoration: underline;
+  transition: filter 100ms ease-out;
 
   :hover {
-    color: ${(props): string => props.theme.colors.cream};
+    filter: brightness(115%);
   }
 `;
 
 const Heading = styled.h2`
-  font-family: ${(props): string => props.theme.fonts.americaExtended};
-  color: ${(props): string => props.theme.colors.burnt};
+  font-family: ${(props): string => props.theme.fonts.america};
+  color: ${(props): string => props.theme.colors.black};
   font-size: 1.25rem;
   line-height: 1.5;
 
@@ -119,7 +118,7 @@ const LinksPage: React.FC = () => (
     <Helmet>
       <title>Tim Brown | Links</title>
     </Helmet>
-    <Layout lightBackground>
+    <Layout>
       <Grid>
         <Header />
         <PageWrapper>

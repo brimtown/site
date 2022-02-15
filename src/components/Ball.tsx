@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const BALL_SPEED = 6;
-const BALL_DIAMETER = 20;
+const BALL_SPEED = 2;
+const BALL_DIAMETER = 150;
 
 interface WrapperProps {
   top: number;
@@ -14,14 +14,15 @@ const BallWrapper = styled.div.attrs<WrapperProps>(({ top, left }) => ({
     transform: `translate3d(${left}px, ${top}px, 0px)`,
   },
 }))<WrapperProps>`
-  background-color: black;
-  border-radius: 50%;
+  background-color: #065f46;
   height: ${BALL_DIAMETER}px;
   width: ${BALL_DIAMETER}px;
+  z-index: 2;
+  mix-blend-mode: screen;
   position: absolute;
   top: 0;
   left: 0;
-  cursor: grab;
+  pointer-events: none;
   will-change: transform;
 `;
 

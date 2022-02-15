@@ -3,14 +3,10 @@ import { ThemeProvider } from 'styled-components';
 import { Helmet } from 'react-helmet';
 import { useStaticQuery, graphql } from 'gatsby';
 import theme, { GlobalStyle } from '../theme';
-import { Sectra, AmericaExtended } from '../theme/typography';
+import { America } from '../theme/typography';
 import favicon from '../favicon.png';
 
-interface Props {
-  lightBackground?: boolean;
-}
-
-const Layout: React.FC<Props> = ({ children, lightBackground }) => {
+const Layout: React.FC = ({ children }) => {
   const data = useStaticQuery(graphql`
     query SiteTitleQuery {
       site {
@@ -32,14 +28,7 @@ const Layout: React.FC<Props> = ({ children, lightBackground }) => {
         <meta name="keywords" content="Tim Brown, software engineer" />
         <link
           rel="preload"
-          href={`${Sectra.woff2}`}
-          as="font"
-          type="font/woff2"
-          crossOrigin="anonymous"
-        />
-        <link
-          rel="preload"
-          href={`${AmericaExtended.woff2}`}
+          href={`${America.woff2}`}
           as="font"
           type="font/woff2"
           crossOrigin="anonymous"
@@ -48,7 +37,7 @@ const Layout: React.FC<Props> = ({ children, lightBackground }) => {
       </Helmet>
       <ThemeProvider theme={theme}>
         <>
-          <GlobalStyle lightBackground={lightBackground} />
+          <GlobalStyle />
           {children}
         </>
       </ThemeProvider>

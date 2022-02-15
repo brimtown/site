@@ -1,8 +1,28 @@
-import styled from 'styled-components';
+import styled, { createGlobalStyle } from 'styled-components';
 
-const FullScreen = styled.div`
-  min-height: 98vh;
-  min-width: 98vw;
+const FullScreen = createGlobalStyle`
+  html {
+    height: -webkit-fill-available;
+  }
+
+  body {
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
+    min-width: 100vw;
+    min-width: -webkit-fill-available;
+    height: 100%;
+  }
+
+  #___gatsby,
+#gatsby-focus-wrapper {
+  min-height: inherit;
+  height: 100%;
+    }
+`;
+
+export const Container = styled.div`
+  min-height: inherit;
+  height: 100%;
   overflow: hidden;
 `;
 

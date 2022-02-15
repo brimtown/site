@@ -1,5 +1,5 @@
 import { createGlobalStyle } from 'styled-components';
-import { Sectra, Univers, America, AmericaExtended } from './typography';
+import { Univers, America } from './typography';
 
 const breakpoints = ['480px', '768px', '1024px', '2048px'];
 
@@ -8,11 +8,12 @@ const theme = {
     fast: '150ms ease-out',
   },
   colors: {
-    black: '#260700',
+    black: '#0c0c0c',
     burnt: '#802200',
     orange: '#ff5800',
-    cream: '#ffd58d',
+    cream: '#fce481',
     lightcream: '#fff4e9',
+    yellow: '#fcd34d',
   },
   fonts: {
     sectra: 'Sectra, georgia, serif',
@@ -28,17 +29,7 @@ const theme = {
   },
 };
 
-interface Props {
-  lightBackground?: boolean;
-}
-
-export const GlobalStyle = createGlobalStyle<Props>`
-  @font-face {
-      font-family: Sectra;
-      font-display: block;
-      src:url("${Sectra.woff2}") format("woff2"),
-          url("${Sectra.woff}") format("woff");
-  }
+export const GlobalStyle = createGlobalStyle`
   @font-face {
       font-family: Univers;
       font-display: block;
@@ -49,11 +40,6 @@ export const GlobalStyle = createGlobalStyle<Props>`
       font-family: America;
       font-display: block;
       src:url("${America.woff2}") format("woff2");
-  }
-  @font-face {
-      font-family: AmericaExtended;
-      font-display: block;
-      src:url("${AmericaExtended.woff2}") format("woff2");
   }
   html, body, div, span,
   h1, h2, h3, h4, h5, h6, p, blockquote, pre,
@@ -83,11 +69,9 @@ export const GlobalStyle = createGlobalStyle<Props>`
     box-sizing: inherit;
   }
   body {
-    background-color: ${(props) =>
-      props.lightBackground ? theme.colors.lightcream : theme.colors.orange};
+    background-color: ${theme.colors.yellow};
     color: ${theme.colors.black};
     font-family: ${theme.fonts.america};
-    transition: background-color ${theme.animations.fast};
   }
   a {
     text-decoration: none;
