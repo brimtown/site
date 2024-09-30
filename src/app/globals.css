@@ -1,13 +1,9 @@
 :root {
-  --background: #fcd34d;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-black: #0c0c0c;
+  --color-yellow: #fcd34d;
+  --color-cream: #fce481;
+  --background: var(--color-yellow);
+  --foreground: var(--color-black);
 }
 
 html, body, div, span,
@@ -49,8 +45,6 @@ a {
   text-decoration: none;
 }
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
+::selection {
+  background: var(--color-cream);
 }

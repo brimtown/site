@@ -1,0 +1,31 @@
+.headerWrapper {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  color: black;
+  font-size: 1.5rem;
+  line-height: 1.1;
+  letter-spacing: -1px;
+}
+
+.nameLink {
+  color: inherit;
+  transition: color 0.1s;
+}
+
+.additionalLink {
+  transition: transform 0.1s;
+  color: inherit;
+  font-weight: bold;
+}
+
+.additionalLink:hover {
+  transform: rotate(90deg);
+}
+
+@media (min-width: 576px) {
+  .headerWrapper {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+  }
+}
