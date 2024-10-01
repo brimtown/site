@@ -14,6 +14,10 @@
   line-height: 2rem;
 }
 
+.fullscreen {
+  min-height: 100vh;
+}
+
 .page {
   min-height: 100vh;
   height: 100%;
