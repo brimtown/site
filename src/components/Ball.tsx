@@ -6,6 +6,7 @@ interface BallProps {
   initialX?: number;
   initialY?: number;
   speed?: number;
+  delay?: number;
 }
 
 const BALL_SIZE = 150;
@@ -14,10 +15,12 @@ const Ball: React.FC<BallProps> = ({
   initialX = 0,
   initialY = 0,
   speed = 2,
+  delay = 0,
 }) => {
   const [position, setPosition] = useState({ x: initialX, y: initialY });
   const delta = useRef({ x: 1, y: 1 });
   const animationRef = useRef<number>();
+  const timeoutRef = useRef<number>();
 
   useEffect(() => {
     const clientRect = document.documentElement.getBoundingClientRect();
@@ -49,14 +52,20 @@ const Ball: React.FC<BallProps> = ({
       animationRef.current = requestAnimationFrame(animate);
     };
 
-    animationRef.current = requestAnimationFrame(animate);
+    timeoutRef.current = window.setTimeout(
+      () => (animationRef.current = requestAnimationFrame(animate)),
+      delay
+    );
 
     return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current);
       }
     };
-  }, [speed]);
+  }, [speed, delay]);
 
   return (
     <div
