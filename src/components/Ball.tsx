@@ -21,22 +21,21 @@ const Ball: React.FC<BallProps> = ({
   const delta = useRef({ x: 1, y: 1 });
   const animationRef = useRef<number>();
   const timeoutRef = useRef<number>();
-  const clientRect = useRef(document.documentElement.getBoundingClientRect());
 
   useEffect(() => {
     const animate = () => {
       setPosition((prevPosition) => {
         let deltaX = delta.current.x;
         let deltaY = delta.current.y;
-        clientRect.current = document.documentElement.getBoundingClientRect();
+        const clientRect = document.documentElement.getBoundingClientRect();
 
-        if (prevPosition.x >= clientRect.current.width - BALL_SIZE) {
+        if (prevPosition.x >= clientRect.width - BALL_SIZE) {
           deltaX = -1;
         } else if (prevPosition.x <= 0) {
           deltaX = 1;
         }
 
-        if (prevPosition.y >= clientRect.current.height - BALL_SIZE) {
+        if (prevPosition.y >= clientRect.height - BALL_SIZE) {
           deltaY = -1;
         } else if (prevPosition.y <= 0) {
           deltaY = 1;
