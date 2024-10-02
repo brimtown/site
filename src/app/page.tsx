@@ -5,7 +5,7 @@ import Ball from "@/components/Ball";
 
 const IndexPage: React.FC = () => (
   <div className={styles.fullscreen}>
-    <Ball initialX={100} initialY={-200} />
+    <Ball initialX={-200} initialY={100} />
     <div className={styles.page}>
       <Header />
       <main className={styles.bodyText}>

@@ -8,42 +8,42 @@ interface BallProps {
   speed?: number;
 }
 
+const BALL_SIZE = 150;
+
 const Ball: React.FC<BallProps> = ({
   initialX = 0,
   initialY = 0,
   speed = 2,
 }) => {
   const [position, setPosition] = useState({ x: initialX, y: initialY });
-  const [velocity, setVelocity] = useState({ x: speed, y: speed });
-  const ballRef = useRef<HTMLDivElement>(null);
+  const delta = useRef({ x: 1, y: 1 });
   const animationRef = useRef<number>();
 
   useEffect(() => {
+    const clientRect = document.documentElement.getBoundingClientRect();
     const animate = () => {
       setPosition((prevPosition) => {
-        const boundingRect = ballRef.current?.getBoundingClientRect();
-        if (!boundingRect) return prevPosition;
+        let deltaX = delta.current.x;
+        let deltaY = delta.current.y;
 
-        let newX = prevPosition.x + velocity.x;
-        let newY = prevPosition.y + velocity.y;
-        let newVelocityX = velocity.x;
-        let newVelocityY = velocity.y;
-
-        if (newX <= 0 || newX + boundingRect.width >= window.innerWidth) {
-          newVelocityX = -newVelocityX;
-          newX = newX <= 0 ? 0 : window.innerWidth - boundingRect.width;
+        if (prevPosition.x >= clientRect.width - BALL_SIZE) {
+          deltaX = -1;
+        } else if (prevPosition.x <= 0) {
+          deltaX = 1;
         }
 
-        if (newY <= 0 || newY + boundingRect.height >= window.innerHeight) {
-          newVelocityY = -newVelocityY;
-          newY = newY <= 0 ? 0 : window.innerHeight - boundingRect.height;
+        if (prevPosition.y >= clientRect.height - BALL_SIZE) {
+          deltaY = -1;
+        } else if (prevPosition.y <= 0) {
+          deltaY = 1;
         }
 
-        if (newVelocityX !== velocity.x || newVelocityY !== velocity.y) {
-          setVelocity({ x: newVelocityX, y: newVelocityY });
-        }
+        delta.current = { x: deltaX, y: deltaY };
 
-        return { x: newX, y: newY };
+        return {
+          x: prevPosition.x + speed * deltaX,
+          y: prevPosition.y + speed * deltaY,
+        };
       });
 
       animationRef.current = requestAnimationFrame(animate);
@@ -56,11 +56,10 @@ const Ball: React.FC<BallProps> = ({
         cancelAnimationFrame(animationRef.current);
       }
     };
-  }, [velocity]);
+  }, [speed]);
 
   return (
     <div
-      ref={ballRef}
       className={styles.ball}
       style={{
         transform: `translate(${position.x}px, ${position.y}px)`,
