@@ -1,12 +1,13 @@
 import React from "react";
 import styles from "./page.module.css";
-import Header from "./header/header";
-import Ball from "@/components/Ball";
+import layoutStyles from "./layout.module.css";
+import Header from "@/components/header/Header";
+import Ball from "@/components/ball/Ball";
 
 const IndexPage: React.FC = () => (
-  <div className={styles.fullscreen}>
+  <div className={layoutStyles.fullscreen}>
     <Ball initialX={-200} initialY={100} />
-    <div className={styles.page}>
+    <div className={`${layoutStyles.page} ${layoutStyles.padding}`}>
       <Header />
       <main className={styles.bodyText}>
         <p className={styles.bodyParagraph}>

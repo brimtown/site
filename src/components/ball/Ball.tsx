@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
-import styles from "./Ball.module.css";
+import styles from "./ball.module.css";
 
 interface BallProps {
   initialX?: number;

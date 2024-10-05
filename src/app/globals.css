@@ -1,24 +1,23 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+}
+
 :root {
   --color-black: #0c0c0c;
   --color-yellow: #fcd34d;
   --color-cream: #fce481;
+
+  --font-size-md: 1rem;
+  --font-size-lg: 1.2rem;
+  --font-size-xl: 1.5rem;
+  --font-size-xxl: 2.5rem;
+
   --background: var(--color-yellow);
   --foreground: var(--color-black);
-}
-
-html, body, div, span,
-h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-a, img, ol, ul, li, fieldset, form, label, legend,
-table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, embed,
-figure, figcaption, footer, header, hgroup,
-menu, nav, section, summary {
-  margin: 0;
-  padding: 0;
-  border: 0;
-  font-size: 100%;
-  font: inherit;
-  vertical-align: baseline;
 }
 
 html,
@@ -31,13 +30,12 @@ body {
   color: var(--foreground);
   background: var(--background);
   font: inherit;
+  line-height: 1.4;
   font-family: var(--font-america), Helvetica, Arial, sans-serif;
 }
 
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
+::selection {
+  background: var(--color-cream);
 }
 
 a {
@@ -45,6 +43,9 @@ a {
   text-decoration: none;
 }
 
-::selection {
-  background: var(--color-cream);
+ul {
+  padding-left: 0.5rem;
+  margin-left: 1rem;
+  margin-bottom: 1.5rem;
+  list-style-type: square;
 }
