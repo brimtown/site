@@ -14,7 +14,7 @@
 }
 
 .additionalLink {
-  transition: transform 0.1s;
+  transition: transform 150ms ease-out;
   color: inherit;
   font-weight: bold;
 }
