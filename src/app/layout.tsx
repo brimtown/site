@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import { Analytics } from "@vercel/analytics/react";
 import "./globals.css";
 
 const america = localFont({
@@ -24,7 +25,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${america.variable}`}>{children}</body>
+      <body className={`${america.variable}`}>
+        {children}
+        <Analytics />
+      </body>
     </html>
   );
 }
