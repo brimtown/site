@@ -1,0 +1,20 @@
+# Accept: application/llm
+
+What is the optimal API response format in a world where LLMs are the primary consumers?
+
+I’ve been noodling on this question after playing with Model Context Protocol (MCP) servers the past few weeks.
+
+Through this lens, `Accept: application/json` seems likely to give way to something different.
+
+If APIs offered an `application/llm` Accept header, what should it be?
+
+## **The Problem**
+
+JSON was designed for machines, not language models. It wastes tokens on structural elements, requires additional parsing logic, and doesn't match the natural reasoning patterns of LLMs.
+
+APIs have been designed for decades with machine parsing in mind \- rigid, explicit structures that computers can easily process. But when our consumers are language models, these formats introduce unnecessary overhead.
+
+## **Before & After**
+
+**Traditional JSON response:**
+
