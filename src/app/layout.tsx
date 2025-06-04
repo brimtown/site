@@ -15,7 +15,7 @@ const america = localFont({
 export const metadata: Metadata = {
   title: "Tim Brown",
   description:
-    "Tim Brown is an experienced software engineer in New York City who builds for the web.",
+    "Tim Brown is an experienced software engineer in New York who builds for the web.",
   icons: {
     icon: "/icon.png",
   },

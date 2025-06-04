@@ -11,11 +11,11 @@ const IndexPage: React.FC = () => (
       <Header />
       <main className={styles.bodyText}>
         <p className={styles.bodyParagraph}>
-          Tim is an experienced software engineer in New&nbsp;York City who
-          builds for the web.
+          Tim is an experienced software engineer in New&nbsp;York who builds
+          for the web.
         </p>
         <p className={styles.bodyParagraph}>
-          He is a Software Engineer at{" "}
+          He is a Staff Engineer at{" "}
           <a
             href="https://www.datadoghq.com/"
             target="_"
