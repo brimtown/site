@@ -2,7 +2,7 @@ import Header from "@/components/header/Header";
 import styles from "../layout.module.css";
 import mdxStyles from "@/styles/mdx-layout.module.css";
 
-export default function MdxLayout({ children }: { children: React.ReactNode }) {
+export default function PostLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className={styles.padding}>
       <Header />

@@ -1,57 +1,57 @@
-.h1 {
+.mdxContent h1 {
   font-size: var(--font-size-xxl);
 }
 
-.h2 {
+.mdxContent h2 {
   font-size: var(--font-size-xl);
 }
 
-.h3 {
+.mdxContent h3 {
   font-size: var(--font-size-lg);
 }
 
-.h4 {
+.mdxContent h4 {
   font-size: var(--font-size-md);
 }
 
-.p {
+.mdxContent p {
   font-size: var(--font-size-md);
 }
 
-.a {
+.mdxContent a {
   font-weight: medium;
   text-decoration: underline;
   background: var(--color-cream);
   transition: filter 50ms ease;
-
-  &:hover {
-    filter: brightness(115%);
-  }
 }
 
-.table {
+.mdxContent a:hover {
+  filter: brightness(115%);
+}
+
+.mdxContent table {
   width: 100%;
   border-collapse: collapse;
   margin: 2rem 0;
   font-size: var(--font-size-md);
 }
 
-.th {
+.mdxContent th {
   text-align: left;
   padding: 0.75rem;
   border-bottom: 2px solid var(--color-black);
   font-weight: bold;
 }
 
-.td {
+.mdxContent td {
   padding: 0.75rem;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
-.tr:nth-child(even) {
+.mdxContent tr:nth-child(even) {
   background-color: rgba(252, 228, 129, 0.2);
 }
 
-.tr:hover {
+.mdxContent tr:hover {
   background-color: rgba(252, 228, 129, 0.4);
 }

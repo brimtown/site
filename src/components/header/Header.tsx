@@ -33,20 +33,20 @@ const Header: React.FC<Props> = ({ color }) => {
         <div
           className={`${styles.menuDropdown} ${menuOpen ? styles.menuOpen : ""}`}
         >
+          <Link href="/writing" className={styles.menuItem}>
+            Writing
+          </Link>
           <Link href="/links" className={styles.menuItem}>
             Links
-          </Link>
-          <Link href="/about" className={styles.menuItem}>
-            About
           </Link>
         </div>
 
         <div className={styles.desktopLinks}>
+          <Link href="/writing" className={styles.desktopLink}>
+            Writing
+          </Link>
           <Link href="/links" className={styles.desktopLink}>
             Links
-          </Link>
-          <Link href="/about" className={styles.desktopLink}>
-            About
           </Link>
         </div>
       </div>
