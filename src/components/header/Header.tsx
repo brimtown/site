@@ -43,7 +43,7 @@ const Header: React.FC<Props> = ({ color }) => {
 
         <div className={styles.desktopLinks}>
           <Link href="/links" className={styles.desktopLink}>
-            Talks
+            Links
           </Link>
           <Link href="/about" className={styles.desktopLink}>
             About
