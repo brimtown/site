@@ -13,6 +13,12 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
         {children}
       </a>
     ),
+    table: ({ children }) => <table className={styles.table}>{children}</table>,
+    thead: ({ children }) => <thead>{children}</thead>,
+    tbody: ({ children }) => <tbody>{children}</tbody>,
+    tr: ({ children }) => <tr className={styles.tr}>{children}</tr>,
+    th: ({ children }) => <th className={styles.th}>{children}</th>,
+    td: ({ children }) => <td className={styles.td}>{children}</td>,
     ...components,
   };
 }

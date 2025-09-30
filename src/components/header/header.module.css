@@ -1,31 +1,140 @@
 .headerWrapper {
   display: flex;
+  align-items: center;
   justify-content: space-between;
   margin-bottom: 1rem;
-  color: black;
+  color: var(--color-black);
   font-size: 1.5rem;
   line-height: 1.1;
-  letter-spacing: -1px;
+  position: relative;
 }
 
 .nameLink {
   color: inherit;
-  transition: color 0.1s;
+  letter-spacing: -1px;
 }
 
-.additionalLink {
-  transition: transform 150ms ease-out;
+.menuContainer {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* Mobile menu button */
+.menuButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
   color: inherit;
+  transition: transform 150ms ease-out;
+  font-size: var(--font-size-xl);
+  line-height: 1;
+  display: flex;
+  align-items: center;
+}
+
+.menuButton:hover {
+  transform: scale(1.1);
+}
+
+.menuIcon {
   font-weight: bold;
+  display: inline-block;
 }
 
-.additionalLink:hover {
-  transform: rotate(90deg);
+/* Mobile dropdown menu */
+.menuDropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: var(--color-cream);
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 0.5rem 0;
+  min-width: 120px;
+  z-index: 10;
+  display: none;
+  flex-direction: column;
+  margin-top: 0.5rem;
 }
 
+.menuOpen {
+  display: flex;
+}
+
+.menuItem {
+  padding: 0.5rem 1rem;
+  color: inherit;
+  text-decoration: none;
+  transition: background-color 0.1s;
+  font-size: var(--font-size-md);
+}
+
+.menuItem:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* Mobile styling (default) */
+@media (max-width: 575px) {
+  .desktopLinks {
+    display: none;
+  }
+  
+  .menuButton {
+    display: flex;
+  }
+}
+
+/* Desktop styling */
 @media (min-width: 576px) {
   .headerWrapper {
     font-size: 2rem;
     margin-bottom: 1.5rem;
+  }
+  
+  .menuButton {
+    display: none;
+  }
+
+  .menuDropdown {
+    margin-top: 0.75rem;
+  }
+
+  .menuItem {
+    font-size: 1.25rem;
+  }
+
+  .desktopLinks {
+    display: flex;
+    gap: .8rem;
+  }
+
+  .desktopLink {
+    font-size: var(--font-size-lg);
+    border-color: var(--color-cream);
+    position: relative;
+    padding: 8px;
+  }
+
+  .desktopLink::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 50%;
+      width: 100%;
+      height: 100%;
+      background-color: var(--color-cream);
+      border-radius: 4px;
+      transform: translate(-50%) scale(.5);
+      opacity: 0;
+      transform-origin: center;
+      transition: transform 100ms ease-out;
+      z-index: -1;
+  }
+
+  .desktopLink:hover::before {
+      transform: translate(-50%) scale(1, .8);
+      opacity: 1;
   }
 }

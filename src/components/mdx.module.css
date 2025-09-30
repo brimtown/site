@@ -28,3 +28,30 @@
     filter: brightness(115%);
   }
 }
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 2rem 0;
+  font-size: var(--font-size-md);
+}
+
+.th {
+  text-align: left;
+  padding: 0.75rem;
+  border-bottom: 2px solid var(--color-black);
+  font-weight: bold;
+}
+
+.td {
+  padding: 0.75rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.tr:nth-child(even) {
+  background-color: rgba(252, 228, 129, 0.2);
+}
+
+.tr:hover {
+  background-color: rgba(252, 228, 129, 0.4);
+}
