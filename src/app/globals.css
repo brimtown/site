@@ -32,7 +32,7 @@ body {
   background: var(--background);
   font: inherit;
   line-height: 1.4;
-  font-family: var(--font-america), Helvetica, Arial, sans-serif;
+  font-family: var(--font-inter), Helvetica, Arial, sans-serif;
 }
 
 ::selection {

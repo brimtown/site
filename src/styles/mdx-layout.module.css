@@ -1,17 +1,31 @@
+.mdxContent {
+  --heading-weight: 500;
+  --heading-letter-spacing-lg: -0.02em;
+  --heading-letter-spacing-sm: -0.01em;
+}
+
 .mdxContent h1 {
   font-size: var(--font-size-xxl);
+  font-weight: var(--heading-weight);
+  letter-spacing: var(--heading-letter-spacing-lg);
 }
 
 .mdxContent h2 {
   font-size: var(--font-size-xl);
+  font-weight: var(--heading-weight);
+  letter-spacing: var(--heading-letter-spacing-lg);
 }
 
 .mdxContent h3 {
   font-size: var(--font-size-lg);
+  font-weight: var(--heading-weight);
+  letter-spacing: var(--heading-letter-spacing-sm);
 }
 
 .mdxContent h4 {
   font-size: var(--font-size-md);
+  font-weight: var(--heading-weight);
+  letter-spacing: var(--heading-letter-spacing-sm);
 }
 
 .mdxContent p {
