@@ -2,36 +2,59 @@
   --heading-weight: 500;
   --heading-letter-spacing-lg: -0.02em;
   --heading-letter-spacing-sm: -0.01em;
+
+  max-width: 70ch;
+  line-height: 1.6;
 }
 
+/* Headings */
 .mdxContent h1 {
   font-size: var(--font-size-xxl);
   font-weight: var(--heading-weight);
   letter-spacing: var(--heading-letter-spacing-lg);
+  margin-top: 3rem;
+  margin-bottom: 1.5rem;
+  line-height: 1.2;
+}
+
+.mdxContent h1:first-child {
+  margin-top: 0;
 }
 
 .mdxContent h2 {
   font-size: var(--font-size-xl);
   font-weight: var(--heading-weight);
   letter-spacing: var(--heading-letter-spacing-lg);
+  margin-top: 3rem;
+  margin-bottom: 1rem;
+  line-height: 1.3;
 }
 
 .mdxContent h3 {
   font-size: var(--font-size-lg);
   font-weight: var(--heading-weight);
   letter-spacing: var(--heading-letter-spacing-sm);
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+  line-height: 1.4;
 }
 
 .mdxContent h4 {
   font-size: var(--font-size-md);
   font-weight: var(--heading-weight);
   letter-spacing: var(--heading-letter-spacing-sm);
+  margin-top: 2rem;
+  margin-bottom: 0.5rem;
+  line-height: 1.4;
 }
 
+/* Paragraphs */
 .mdxContent p {
   font-size: var(--font-size-md);
+  margin-bottom: 1.5rem;
 }
 
+/* Links */
 .mdxContent a {
   font-weight: medium;
   text-decoration: underline;
@@ -43,6 +66,62 @@
   filter: brightness(115%);
 }
 
+/* Lists */
+.mdxContent ul,
+.mdxContent ol {
+  margin-bottom: 1.5rem;
+  padding-left: 1.5rem;
+}
+
+.mdxContent li {
+  margin-bottom: 0.5rem;
+}
+
+.mdxContent li:last-child {
+  margin-bottom: 0;
+}
+
+/* Code */
+.mdxContent code {
+  font-family: 'Monaco', 'Menlo', 'Courier New', monospace;
+  font-size: 0.9em;
+  background: rgba(0, 0, 0, 0.05);
+  padding: 0.2em 0.4em;
+  border-radius: 3px;
+}
+
+.mdxContent pre {
+  background: rgba(0, 0, 0, 0.05);
+  padding: 1.5rem;
+  border-radius: 6px;
+  overflow-x: auto;
+  margin-bottom: 1.5rem;
+  line-height: 1.5;
+}
+
+.mdxContent pre code {
+  background: none;
+  padding: 0;
+  font-size: 0.875rem;
+}
+
+/* Blockquotes */
+.mdxContent blockquote {
+  border-left: 3px solid var(--color-black);
+  padding-left: 1.5rem;
+  margin: 2rem 0;
+  font-style: italic;
+  color: rgba(12, 12, 12, 0.8);
+}
+
+/* Horizontal Rule */
+.mdxContent hr {
+  border: none;
+  border-top: 1px solid rgba(0, 0, 0, 0.15);
+  margin: 3rem 0;
+}
+
+/* Tables */
 .mdxContent table {
   width: 100%;
   border-collapse: collapse;
@@ -52,20 +131,16 @@
 
 .mdxContent th {
   text-align: left;
-  padding: 0.75rem;
+  padding: 0.75rem 1rem;
   border-bottom: 2px solid var(--color-black);
-  font-weight: bold;
+  font-weight: 600;
 }
 
 .mdxContent td {
-  padding: 0.75rem;
+  padding: 0.75rem 1rem;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
-.mdxContent tr:nth-child(even) {
-  background-color: rgba(252, 228, 129, 0.2);
-}
-
-.mdxContent tr:hover {
-  background-color: rgba(252, 228, 129, 0.4);
+.mdxContent tr:last-child td {
+  border-bottom: none;
 }

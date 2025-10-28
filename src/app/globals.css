@@ -31,7 +31,7 @@ body {
   color: var(--foreground);
   background: var(--background);
   font: inherit;
-  line-height: 1.4;
+  line-height: 1.6;
   font-family: var(--font-inter), Helvetica, Arial, sans-serif;
 }
 
