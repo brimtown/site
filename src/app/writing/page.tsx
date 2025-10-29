@@ -16,6 +16,7 @@ async function getPosts() {
         return {
           slug,
           title: metadata?.title || slug,
+          subtitle: metadata?.subtitle || "",
           date: metadata?.date || "",
           description: metadata?.description || "",
         };
