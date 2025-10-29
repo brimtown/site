@@ -32,7 +32,7 @@ export default async function BlogList() {
 
   return (
     <div>
-      <h1>Writing</h1>
+      <h1>Blog</h1>
       {posts.length === 0 ? (
         <p>No posts yet.</p>
       ) : (

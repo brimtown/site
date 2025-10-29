@@ -7,7 +7,9 @@ export default function MdxLayout({ children }: { children: React.ReactNode }) {
     <div className={styles.padding}>
       <Header />
       <div className={styles.flexColumn}>
-        <main className={`${styles.main} ${mdxStyles.mdxContent}`}>{children}</main>
+        <main className={`${styles.main} ${mdxStyles.mdxContent}`}>
+          {children}
+        </main>
       </div>
     </div>
   );

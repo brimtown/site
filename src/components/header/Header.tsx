@@ -33,8 +33,8 @@ const Header: React.FC<Props> = ({ color }) => {
         <div
           className={`${styles.menuDropdown} ${menuOpen ? styles.menuOpen : ""}`}
         >
-          <Link href="/writing" className={styles.menuItem}>
-            Writing
+          <Link href="/blog" className={styles.menuItem}>
+            Blog
           </Link>
           <Link href="/links" className={styles.menuItem}>
             Links
@@ -42,8 +42,8 @@ const Header: React.FC<Props> = ({ color }) => {
         </div>
 
         <div className={styles.desktopLinks}>
-          <Link href="/writing" className={styles.desktopLink}>
-            Writing
+          <Link href="/blog" className={styles.desktopLink}>
+            Blog
           </Link>
           <Link href="/links" className={styles.desktopLink}>
             Links
