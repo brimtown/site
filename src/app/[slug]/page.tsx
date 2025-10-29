@@ -12,7 +12,7 @@ interface PostPageProps {
 
 function formatDate(dateString: string): string {
   // Parse as local date to avoid timezone issues
-  const [year, month, day] = dateString.split('-').map(Number);
+  const [year, month, day] = dateString.split("-").map(Number);
   const date = new Date(year, month - 1, day);
   return date.toLocaleDateString("en-US", {
     year: "numeric",

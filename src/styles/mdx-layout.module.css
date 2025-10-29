@@ -59,7 +59,6 @@
   font-weight: medium;
   text-decoration: underline;
   background: var(--color-cream);
-  transition: filter 50ms ease;
 }
 
 .mdxContent a:hover {

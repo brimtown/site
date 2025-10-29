@@ -7,7 +7,6 @@
   color: black;
   background-color: var(--color-cream);
   text-decoration: underline;
-  transition: filter 100ms ease-out;
 }
 
 .homepageLink:hover {
@@ -20,7 +19,6 @@
 
 .emailText {
   color: black;
-  transition: filter 100ms ease-out;
   font-size: 1rem;
 }
 
