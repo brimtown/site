@@ -56,7 +56,6 @@
 
 /* Links */
 .mdxContent a {
-  font-weight: medium;
   text-decoration: underline;
   background: var(--color-cream);
 }
@@ -142,4 +141,13 @@
 
 .mdxContent tr:last-child td {
   border-bottom: none;
+}
+
+.mdxContent strong {
+  font-weight: 600;
+}
+
+.mdxContent a img {
+  text-decoration: none;
+  background: none;
 }

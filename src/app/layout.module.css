@@ -6,7 +6,7 @@
 
 .main {
   max-width: 60ch;
-  min-width: 50vw;
+  width: 100%;
 }
 
 .flexColumn {
@@ -32,5 +32,9 @@
 @media (min-width: 768px) {
   .padding {
     padding: 2rem 4rem;
+  }
+
+  .main {
+    min-width: 50vw;
   }
 }
