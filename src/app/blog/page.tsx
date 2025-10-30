@@ -19,7 +19,6 @@ async function getPosts() {
           title: metadata?.title || slug,
           subtitle: metadata?.subtitle || "",
           date: metadata?.date || "",
-          description: metadata?.description || "",
         };
       })
   );

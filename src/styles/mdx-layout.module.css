@@ -95,6 +95,7 @@
   overflow-x: auto;
   margin-bottom: 1.5rem;
   line-height: 1.5;
+  white-space: pre-wrap;
 }
 
 .mdxContent pre code {
@@ -150,4 +151,9 @@
 .mdxContent a img {
   text-decoration: none;
   background: none;
+}
+
+.mdxContent figcaption {
+  font-size: var(--font-size-sm);
+  font-style: italic;
 }

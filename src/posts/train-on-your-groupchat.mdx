@@ -1,0 +1,260 @@
+export const metadata = {
+  title: 'Train On Your Groupchat',
+  subtitle: 'Using LoRA and in-browser inference to fine-tune your friends',
+  date: '2025-11-07',
+};
+
+> You can jump in here: [infinitegroupchat.com ↗](https://groupme-web.vercel.app).  
+> It’s powered by a fine-tuned LLM running on-device (iOS26 / WebGPU required)
+
+I made an LLM read 50,000 messages from my college groupchat. It can run on a phone.
+
+## How did we get here?
+
+About 10 years ago, I wanted a project to make my friends laugh. Weird Twitter and Markov chains were a thing, so I scraped ~3.5 years worth of our groupchat and "trained" a bot on each member. It took about 100 lines of Python. Here’s what it sounded like:
+
+```
+Tim: tomato runs. get yourself some athletics shorts man. love yourself.  
+Tim: an archive of this nascent century, my backpack was found in brooklyn  
+```
+*SOTA in 2016*
+
+Recently, one of those friends suggested revisiting the project using the past few years of improvements in AI.
+
+A few forces came together in late 2025 to make this timely:
+
+1. A bounty of small, high quality open source models: particularly the latest Qwen series  
+2. Growing interest in fine-tuning and LoRA - [John Schulman’s LoRA blogpost](https://thinkingmachines.ai/blog/lora/) in particular was a motivator
+3. Safari shipping WebGPU by default in iOS26, allowing us to run sufficiently small models well on phones
+
+
+Working within these themes, I set out to fine-tune my own language model and build an interactive web app around it.
+
+## Picking a model
+
+I knew up front that I wanted to fine-tune instead of using RAG. This was partly for the learning experience, but also because it felt like fine-tuning would be more akin to the original Markov chain approach than a RAG-based one would’ve been.
+
+At work, my team had [fine-tuned Llama 3 using LoRA](https://x.com/_brimtown/status/1979669362232463704) to good success on a variant of text-to-SQL. My colleague [Patrick](https://patricklee.nyc/) spoke highly of [Unsloth’s notebooks](https://docs.unsloth.ai/get-started/unsloth-notebooks) for fine-tuning, so I started there.
+
+I sensed that I could use a very small language model by 2025 standards and still get decent results. The smallest Qwen model I initially saw in Unsloth’s notebooks was Qwen3 4B, so I picked that one mostly on vibes.
+
+I did briefly consider using a base model instead of an instruct-tuned model. A base model felt even more similar to the Markov approach of purely learning sequences, but I went with the instruct model for convenience. Here’s the prompt I chose to train with:
+
+```
+You are mimicking users in a group chat. Given the conversation history, respond as the specified user.
+
+Recent messages:
+[Speaker1]: [Message1]
+[Speaker2]: [Message2]
+...
+
+Respond as [TargetSpeaker]:
+```
+
+Using this format (“Respond as [TargetSpeaker]”, and “Recent messages”) would allow us to choose a speaker and vary the conversation history. At inference time, we could run this repeatedly to have a conversation amongst our simulated participants.
+
+## Loading in 50,000 of the dumbest conversations
+
+After processing my scraped groupchat data into ChatML JSON format (one of several supported by Unsloth), each individual row looked like this:
+
+```
+{
+  "conversations":[
+  {
+     "role":"user",
+     "content":"You are mimicking users in a group chat. Given the conversation history, respond as the specified user.
+
+     Recent messages:
+     Tim: please add me @timeclown
+     Niccolo: The 24hr says hello
+     Spencer: Yo is nutty
+     Tim: Yo is the future. Embrace yo
+     Tim: 1 bit communication fuck language fuck word traps just yo
+
+     Respond as Spencer:"
+   },
+   {
+      "role":"assistant",
+      "content":"Communication reduced to intent"
+   }
+  ]
+}
+```
+
+*discussing short-lived app [Yo](https://en.wikipedia.org/wiki/Yo_(app)) in 2014* 
+
+I ended up with a 52,000 row JSON file of the above, each containing 5 recent messages.
+
+There was a lot of junk in the messages - mostly people @-mentioning each others’ usernames, and sending URLs. I left these in to keep things ‘authentic’, for a sort of low-intervention feel. I came to regret not stripping the URLs in particular, and ended up filtering them out at inference time instead.
+
+## Runtime disconnected
+
+Actual training was straightforward. Since the notebook was already set up in Google Colab, I could just hit “run” on each cell and wait. I was able to use a free T4 GPU instance for about 6 hours, periodically pausing and running some inference to test. I saw it learning...
+
+```
+Tim: This shit is 1000x better than my old phone
+Tim: You know that?
+Tim: It's a 4s
+Tim: That's the phone
+Tim: It's an iPhone
+```
+
+...until at about 80% completion, when a “runtime disconnected” message popped up. I clicked around, momentarily oblivious to the fact that **I lost everything.**
+
+I quickly learned that Colab runtimes are ephemeral, my previous checkpoints were gone, and that I should’ve been persisting everything to Google Drive instead of the runtime disk.
+
+Mostly mad at myself, I sprung for Colab Pro ($10 a month), restarted training on a chonky A100 this time, and watched the run finish in a cool hour and a half. I had a model again! 
+
+```
+Jackson: Anyone wanna go to the deece
+Talia: I have a meeting at 3:30
+Jackson: I'll be there soon
+Spencer: Where's the retreat
+Spencer: I'm gonna head from joss
+Niccolo: Retreat is closed 😂
+Jackson: where u
+Jackson: Where the actual fuck r people
+Tim: Lib
+Nick: Lib
+```
+
+The references here (“deece”, “retreat”, “joss”) are semi-inscrutable outside our chat, but the model had learned specific place vocabulary, as well as our penchant for logistics. 3.5 years of chat history were now encoded into one 250MB LoRA adapter, or roughly 2.5GB when merged back into the original model.
+
+## Building the chat app
+
+I ran inference manually in Colab for a while, switching back to a T4 instead of an A100 to preserve my 100 monthly credits. I was having so much fun that I ended up building the initial chat application directly in a Python cell in the notebook.
+
+Beyond simulating conversations, I added a few other quality of life features like the ability to hardcode different speakers (i.e. force Tim to monologue, or a conversation between two folks), and pre-filling conversations. I also kept fiddling with temperature, top_p, and top_k settings to get the vibe right. Lastly, I made it so that you as a human could join the conversation, if you ever wanted to talk to a multiple-personality language model.
+
+I sent screenshots to my friends as I went, and took requests for conversation topics for our little ant farm to have. Everyone wanted to see themselves talk, and mostly to just watch what random tangents the sim-chat got fixated on.
+
+```
+Spencer: What's the difference between a meme and a millennial
+Nick: A meme is a copy, a millennial is the original
+Spencer: Yeah it's just a copy dude it's not the millennial
+Niccolo: @speonk I'm with you 100%
+Spencer: It's cool dude I'm just trying to make sense of this
+Spencer: It's like a difference between a picture of a cat and the cat
+Spencer: You know what? I'm going to stop thinking about this.
+```
+
+## Inference is cheap
+
+Not wanting to drain my credits further, I ported the Python script from running on Google’s cloud GPUs to running locally on my Macbook’s CPU by replacing Colab’s inference with [Ollama](https://github.com/ollama/ollama-python). This required downloading the merged model (LoRA adapter + original) as a single, 2.5GB [GGUF](https://huggingface.co/docs/hub/en/gguf) file locally.
+
+I was astonished to see that, even on the CPU of a mid-2018 Intel Macbook, I was getting surprisingly fast tokens-per-second for a 4B parameter model. This is a huge testament to the [llama.cpp project](https://github.com/ggml-org/llama.cpp) underlying Ollama, and made me feel (overly) bullish about eventually hosting the inference elsewhere it could run on the web.
+
+## “where host finetuned model reddit”
+
+We use vLLM for inference at work, but that felt like too much to manage for a hobby project. I also really didn’t want to pay for a beefy GPU - I had already seen how well the model ran on a 2018 Macbook CPU.
+
+I found myself searching for things like “host .gguf” and perusing threads on the [/r/LocalLLaMA](https://www.reddit.com/r/LocalLLaMA/) subreddit. Most questions there didn’t have very satisfactory answers.
+
+[reddit screenshot]
+
+*[Wherein the top answer is just “Server”](https://www.reddit.com/r/LocalLLaMA/comments/1kh4joc/where_are_you_hosting_your_fine_tuned_model/)*
+
+I did eventually find [various](https://replicate.com/) [hosted](https://huggingface.co/docs/inference-providers/en/providers/hf-inference) [inference](https://runpod.io/) [providers](https://friendli.ai/), but most wanted to sell me H100 access or have me talk to sales. Support for custom fine-tuned models also varied. Coming from frontend land, I was surprised not to find an obvious “Vercel for models” targeted at hobbyists, even one with extreme limitations.
+
+## First, failed attempt at hosting
+
+I tried to deploy llama-cpp-server myself on [Fly.io](http://Fly.io) with unsatisfactory results. This was mostly due to my own self-imposed cost constraints. I wanted the deployment to be true scale-to-zero serverless - this project was just meant to make my friends laugh, and I didn’t want to pay for compute 30 days a month. The app could tolerate a cold start on the order of seconds and scale back to zero after.
+
+I was probably doing many things wrong, but I found working with a 2.5GB file on the commodity tier of machines (shared CPU, 4GB RAM) really working against me:
+
+1. A deploy took around 20 minutes, mostly in network transfer time  
+2. My “seconds-long” cold start was north of **6 minutes** while the model was loaded into memory!
+
+The worst part was that after waiting the 6 minutes, the machine would wake up for 1 second, see no requests, and then immediately scale back to zero, by design. I could have remedied this by foregoing the serverless approach entirely, and keeping the instance always on for roughly $20 a month. I didn’t feel ready to compromise.
+
+## We’re gonna need a smaller model
+
+I banged my head for a while. I resolved that we’d need a smaller-than-2.5GB model to improve cold starts. But how small? I considered buying a Raspberry Pi to self-host the model for a one-time cost.
+
+At this point, I took a step back: if this really is a cold-start problem, and not an inference or tokens per second issue: if I could shrink the model enough to reduce cold starts on a server somewhere, couldn’t I just as easily shrink it enough to pay the “cold start” once, *directly in the user’s browser*, and run inference on their machine? 
+
+Could I just run a fine-tuned LLM directly in the browser?
+
+## Always bet on JS
+
+I was loosely aware of efforts to run language models in the browser, through projects like [transformers.js](https://huggingface.co/docs/transformers.js/en/index) and WebLLM. WebLLM in particular has a [wonderful demo](https://chat.webllm.ai/#/chat), and I noticed it supported the Qwen models already.
+
+After trying Qwen3 0.6B in their demo, I saw that it had both a reasonable download time (~10s of seconds) and speedy generation in-browser. If I could replace the original model with my fine-tune, we would be so so back.
+
+I restarted training from scratch with the 0.6B model, which was as simple as changing the name in one cell. It still took an hour and a half to train even with a smaller model, as I increased the LoRA rank to 64 and trained for more duplicate epochs. These were fairly unprincipled guesses - the latter (overtraining on duplicate data) ultimately seemed like it fried the model.
+
+[fried screenshot]
+*bro is cooked*
+
+The last step was to convert the .safetensors format into WebLLM’s MLC format so that we could run it on the web. I found MLC’s [conversion process](https://llm.mlc.ai/docs/compilation/convert_weights.html) fiddly and prone to segfault, possibly due to my Intel Mac not being well supported. After failing to convert locally, I set up a dedicated [MLC Conversion notebook](https://colab.research.google.com/drive/1NbdAzcVNGsCSHNTFnOMYpmp-pDwntukw?usp=sharing) on Colab’s GPUs, and yolo-hardcoded the version to cu-124 nightly. That worked.
+
+The resulting model quality was notably worse than the raw LoRA, likely due to aggressive quantization (q4f16_1). Still, it was passable, and we’d dropped the merged model size by **10x** - from roughly 2.5GB for the merged 4B param model, down to 250MB for quantized 0.6B.
+
+Because we were using a model architecture that WebLLM already supported, we could re-use the base Qwen3 0.6B WASM runtime, and just register our custom model file on top of it:
+
+```typescript
+/**
+ * Configure and register custom WebLLM models
+ * @returns Configured app config with custom models
+ */
+export async function createAppConfig() {
+  // Dynamic import to keep WebLLM out of main bundle
+  const { prebuiltAppConfig } = await import('@mlc-ai/web-llm');
+
+  // Clone the config to avoid mutating the shared global object
+  const appConfig = {
+    ...prebuiltAppConfig,
+    model_list: [...prebuiltAppConfig.model_list]
+  };
+
+  // Qwen3-0.6B
+  const qwen3_06bBase = appConfig.model_list.find(m => m.model_id === "Qwen3-0.6B-q4f16_1-MLC");
+  if (qwen3_06bBase) {
+    appConfig.model_list.push({
+      ...qwen3_06bBase,
+      model_id: "qwen3-0.6b-finetuned",
+      model: "https://huggingface.co/brimtown/Groupchat-Qwen3-0.6B-MLC",
+      overrides: {
+        context_window_size: 512
+      }
+    });
+  }
+
+  return appConfig;
+}
+```
+
+## The final web app
+
+Other than the “language model in the browser” part, [the final web app](https://groupme-web.vercel.app/) is dead simple. It started as a single HTML file with vanilla JS, and only at the very end did I port it to Vite and React. The app is client-side rendered and served with static assets on Vercel. The model weights themselves (~250MB) are also static assets, being served from HuggingFace’s CDN at initial load, and subsequently from a browser cache.
+
+I realized late on that I could even run a model this small in my phone’s browser: I just needed to upgrade my iPhone 14 Pro to iOS26 for [WebGPU support](https://caniuse.com/webgpu). I saw frequent crashes with Qwen3 0.6B that seemed to imply serious memory pressure, so I did one more training run with Qwen2.5 0.5B. This was just enough to keep the tab using less than a 1GB of memory on iOS, a threshold I found on this [Github issue](https://github.com/mlc-ai/web-llm/issues/386#issuecomment-2207631803). This ended up being the default model (“Mobile”) that I shipped, but the whole family ([Groupchat 4B](https://huggingface.co/brimtown/Groupchat-Qwen3-4B-MLC), [Groupchat 0.6B](https://huggingface.co/brimtown/Groupchat-Qwen3-0.6B-MLC), and [Groupchat 0.5B](https://huggingface.co/brimtown/Groupchat-Qwen2.5-0.5B-MLC)) are selectable in the app.
+
+It’s not all roses. The app still crashes on phones due to memory pressure, so we persist the conversation in browser localStorage to allow quick resumption after refresh. This tiny, fried model also not infrequently outputs Chinese characters (Qwen is produced by Alibaba), so we filter characters in that Unicode range out of responses. I’m tickled that the original 4B param model is available on the web, for true sickos willing to wait for a 2.5GB download.
+
+
+On the plus side, generation speed is not an issue with the smallest model; I even added a toggleable delay feature to slow things down. Lastly, I added a “Group Topic” feature that is just injected into the prompt, instructing the target speaker to “talk ONLY about [GroupTopic]”.
+
+## Static, local-first apps
+
+The architecture of this app was extremely fun to build, and, most importantly, I could share it with my friends for free.
+
+Some of these decisions are similar to Claude Code’s architecture, like storing all conversations on-device (in our case, in localStorage), and the lack of a traditional “backend” (just calls to a Chat Completions-style inference API). For the latter, the difference is that ours runs entirely locally. We’ve essentially transformed compute into storage, by replacing a model served behind an HTTP API with a model’s weights being served from a CDN.
+
+For the purposes of an (admittedly insane) side project, I’m happy with the tradeoffs. Platforms like Vercel, HuggingFace, and GitHub give out free storage, and as a developer I’m more than ok to let users ‘bring their own compute’ without my credit card going brrrrr.
+
+## Future work
+
+Having trained my first (three) models, I would love to revisit the fine-tuning process. I’d move away from my ‘no intervention’ data approach and do a bit more curation of the 50,000 examples. In the current models, in addition to stripping out URLs, I had to pull tricks like raising the temperature high just to get everyone to stop talking about what time lunch was.
+
+In general my first pass here was extremely vibes-based. Properly ablating decisions like LoRA rank with some sort of homecooked eval would be nice.
+
+Getting farther ahead of myself, a good follow up could also be to use things like the number of “likes” each message got to train a reward model and do some RL. Maybe combine that with training a 14B model, and try [strong-to-weak distillation](https://thinkingmachines.ai/blog/on-policy-distillation/) to produce the smaller models (similar to what Qwen3 does).
+
+Future open source models will hopefully keep improving what the sub-1B parameter class can do, and bring new opportunities to deploy them to the web.
+
+If we can [ship a database](https://www.notion.com/blog/how-we-sped-up-notion-in-the-browser-with-wasm-sqlite) in the browser, why not ship a language model?
+
+**Acknowledgements**
+
+Thanks to Ali Mahmoud, Abe Rubenstein, Patrick Lee, Vikram Oberoi, Brian Cobb, and Mae Capozzi for their feedback on this post.
