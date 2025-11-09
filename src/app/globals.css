@@ -14,9 +14,9 @@
   --color-muted-light: rgba(12, 12, 12, 0.6);
   --color-shade: rgba(0, 0, 0, 0.05);
 
-  --font-size-sm: .8rem;
-  --font-size-md: 1rem;
-  --font-size-lg: 1.2rem;
+  --font-size-sm: .9rem;
+  --font-size-md: 1.1rem;
+  --font-size-lg: 1.3rem;
   --font-size-xl: 1.5rem;
   --font-size-xxl: 2.5rem;
 
@@ -34,6 +34,7 @@ body {
   color: var(--foreground);
   background: var(--background);
   font: inherit;
+  font-size: var(--font-size-md);
   line-height: 1.6;
   font-family: var(--font-inter), Helvetica, Arial, sans-serif;
 }

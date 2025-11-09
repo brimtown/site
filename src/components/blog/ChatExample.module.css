@@ -1,0 +1,37 @@
+.chatExample {
+  background: rgba(0, 0, 0, 0.05);
+  padding: 1.5rem;
+  border-radius: 6px;
+  margin-bottom: 1.5rem;
+  font-family: 'Monaco', 'Menlo', 'Courier New', monospace;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.speaker {
+  font-weight: 600;
+}
+
+.speakerTim {
+  color: #ff0000; /* Bright red */
+}
+
+.speakerSpencer {
+  color: #0000ff; /* Bright blue */
+}
+
+.speakerNiccolo {
+  color: #964B00; /* Golden/amber */
+}
+
+.speakerJackson {
+  color: #008080; /* Teal */
+}
+
+.speakerTalia {
+  color: #00aa00; /* Green */
+}
+
+.speakerNick {
+  color: #ff00ff; /* Hot pink/magenta */
+}

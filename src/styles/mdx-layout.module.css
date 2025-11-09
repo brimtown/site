@@ -4,6 +4,7 @@
   --heading-letter-spacing-sm: -0.01em;
 
   max-width: 70ch;
+  font-size: var(--font-size-md);
   line-height: 1.6;
 }
 
@@ -46,6 +47,17 @@
   margin-top: 2rem;
   margin-bottom: 0.5rem;
   line-height: 1.4;
+}
+
+/* Heading anchor links */
+.mdxContent h1 a,
+.mdxContent h2 a,
+.mdxContent h3 a,
+.mdxContent h4 a {
+  color: inherit;
+  text-decoration: none;
+  background: none;
+  cursor: pointer;
 }
 
 /* Paragraphs */
@@ -95,13 +107,17 @@
   overflow-x: auto;
   margin-bottom: 1.5rem;
   line-height: 1.5;
-  white-space: pre-wrap;
 }
 
 .mdxContent pre code {
   background: none;
   padding: 0;
   font-size: 0.875rem;
+  display: block;
+}
+
+.mdxContent pre code[data-line] {
+  padding: 0 1rem;
 }
 
 /* Blockquotes */
@@ -161,9 +177,21 @@
   margin: 0;
 }
 
+.mdxContent figure pre {
+  margin-bottom: 0;
+}
+
+.mdxContent figure > div {
+  margin-bottom: 0;
+}
+
+.mdxContent figure figure {
+  margin: 0;
+}
+
 .mdxContent figcaption {
   text-align: center;
-  font-size: var(--font-size-md);
+  font-size: var(--font-size-sm);
   font-style: italic;
   color: var(--color-muted);
   margin-top: 0.5rem;
