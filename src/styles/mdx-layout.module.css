@@ -153,7 +153,26 @@
   background: none;
 }
 
+.mdxContent figure {
+  margin: 2rem 0;
+}
+
+.mdxContent figure img {
+  margin: 0;
+}
+
 .mdxContent figcaption {
-  font-size: var(--font-size-sm);
+  text-align: center;
+  font-size: var(--font-size-md);
   font-style: italic;
+  color: var(--color-muted);
+  margin-top: 0.5rem;
+}
+
+/* Images */
+.mdxContent img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
 }

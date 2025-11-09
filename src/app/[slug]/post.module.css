@@ -22,11 +22,24 @@
   text-wrap: balance;
 }
 
-.postDate {
-  display: block;
+.postMeta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   font-size: var(--font-size-sm);
   color: var(--color-muted-light);
+}
+
+.postDate {
   font-weight: 500;
   letter-spacing: 0.02em;
   margin: 0;
+}
+
+.postByline {
+  font-weight: 500;
+}
+
+.postByline a {
+  color: var(--color-black);
 }

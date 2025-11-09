@@ -35,9 +35,23 @@ export default async function PostPage({ params }: PostPageProps) {
           {metadata.subtitle && (
             <p className={styles.postSubtitle}>{metadata.subtitle}</p>
           )}
-          {metadata.date && (
-            <time className={styles.postDate}>{formatDate(metadata.date)}</time>
-          )}
+          <div className={styles.postMeta}>
+            <span className={styles.postByline}>
+              by{" "}
+              <a
+                href="https://x.com/_brimtown"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                @_brimtown
+              </a>
+            </span>
+            {metadata.date && (
+              <time className={styles.postDate}>
+                {formatDate(metadata.date)}
+              </time>
+            )}
+          </div>
         </header>
         <div className={mdxStyles.mdxContent}>
           <Post />
@@ -45,6 +59,7 @@ export default async function PostPage({ params }: PostPageProps) {
       </article>
     );
   } catch (error) {
+    console.log("Post not found:", error);
     notFound();
   }
 }

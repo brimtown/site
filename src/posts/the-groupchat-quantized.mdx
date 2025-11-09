@@ -1,5 +1,5 @@
 export const metadata = {
-  title: 'Train On Your Groupchat',
+  title: 'The Groupchat, Quantized',
   subtitle: 'Using LoRA and in-browser inference to fine-tune your friends',
   date: '2025-11-07',
 };
@@ -148,11 +148,12 @@ I was astonished to see that, even on the CPU of a mid-2018 Intel Macbook, I was
 
 We use vLLM for inference at work, but that felt like too much to manage for a hobby project. I also really didn’t want to pay for a beefy GPU - I had already seen how well the model ran on a 2018 Macbook CPU.
 
-I found myself searching for things like “host .gguf” and perusing threads on the [/r/LocalLLaMA](https://www.reddit.com/r/LocalLLaMA/) subreddit. Most questions there didn’t have very satisfactory answers.
+I found myself searching for things like "host .gguf" and perusing threads on the [/r/LocalLLaMA](https://www.reddit.com/r/LocalLLaMA/) subreddit. Most questions there didn't have very satisfactory answers.
 
-[reddit screenshot]
-
-*[Wherein the top answer is just “Server”](https://www.reddit.com/r/LocalLLaMA/comments/1kh4joc/where_are_you_hosting_your_fine_tuned_model/)*
+<figure>
+  <img src="/images/groupchat-reddit-hosting.webp" alt="Reddit thread asking where to host fine tuned model" />
+  <figcaption><a href="https://www.reddit.com/r/LocalLLaMA/comments/1kh4joc/where_are_you_hosting_your_fine_tuned_model/">Wherein the top answer is just "Server"</a></figcaption>
+</figure>
 
 I did eventually find [various](https://replicate.com/) [hosted](https://huggingface.co/docs/inference-providers/en/providers/hf-inference) [inference](https://runpod.io/) [providers](https://friendli.ai/), but most wanted to sell me H100 access or have me talk to sales. Support for custom fine-tuned models also varied. Coming from frontend land, I was surprised not to find an obvious “Vercel for models” targeted at hobbyists, even one with extreme limitations.
 
@@ -183,8 +184,10 @@ After trying Qwen3 0.6B in their demo, I saw that it had both a reasonable downl
 
 I restarted training from scratch with the 0.6B model, which was as simple as changing the name in one cell. It still took an hour and a half to train even with a smaller model, as I increased the LoRA rank to 64 and trained for more duplicate epochs. These were fairly unprincipled guesses - the latter (overtraining on duplicate data) ultimately seemed like it fried the model.
 
-[fried screenshot]
-*bro is cooked*
+<figure>
+  <img src="/images/groupchat-fried.webp" alt="Overtrained model output showing nonsensical repeated text" />
+  <figcaption>bro is cooked</figcaption>
+</figure>
 
 The last step was to convert the .safetensors format into WebLLM’s MLC format so that we could run it on the web. I found MLC’s [conversion process](https://llm.mlc.ai/docs/compilation/convert_weights.html) fiddly and prone to segfault, possibly due to my Intel Mac not being well supported. After failing to convert locally, I set up a dedicated [MLC Conversion notebook](https://colab.research.google.com/drive/1NbdAzcVNGsCSHNTFnOMYpmp-pDwntukw?usp=sharing) on Colab’s GPUs, and yolo-hardcoded the version to cu-124 nightly. That worked.
 
