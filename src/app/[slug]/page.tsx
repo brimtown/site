@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { Metadata } from "next";
 import fs from "fs";
 import path from "path";
 import styles from "./post.module.css";
@@ -19,6 +20,49 @@ function formatDate(dateString: string): string {
     month: "long",
     day: "numeric",
   });
+}
+
+// Generate metadata for social sharing
+export async function generateMetadata({ params }: PostPageProps): Promise<Metadata> {
+  const { slug } = params;
+
+  try {
+    const { metadata } = await import(`@/posts/${slug}.mdx`);
+
+    const ogImageUrl = `/api/og?title=${encodeURIComponent(metadata.title)}&subtitle=${encodeURIComponent(metadata.subtitle || '')}&date=${encodeURIComponent(metadata.date || '')}`;
+
+    return {
+      title: metadata.title,
+      description: metadata.subtitle,
+      openGraph: {
+        title: metadata.title,
+        description: metadata.subtitle,
+        type: 'article',
+        publishedTime: metadata.date,
+        authors: ['@_brimtown'],
+        url: `https://brimtown.com/${slug}`,
+        images: [
+          {
+            url: ogImageUrl,
+            width: 1200,
+            height: 630,
+            alt: metadata.title,
+          },
+        ],
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title: metadata.title,
+        description: metadata.subtitle,
+        creator: '@_brimtown',
+        images: [ogImageUrl],
+      },
+    };
+  } catch (error) {
+    return {
+      title: 'Post Not Found',
+    };
+  }
 }
 
 export default async function PostPage({ params }: PostPageProps) {
