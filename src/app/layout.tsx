@@ -75,8 +75,53 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const personSchema = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: "Tim Brown",
+    alternateName: "brimtown",
+    url: siteUrl,
+    sameAs: [
+      "https://twitter.com/_brimtown",
+      "https://github.com/brimtown",
+      "https://www.linkedin.com/in/brimtown/",
+    ],
+    jobTitle: "Staff Engineer",
+    worksFor: {
+      "@type": "Organization",
+      name: "Datadog",
+      url: "https://www.datadoghq.com/",
+    },
+  };
+
+  const websiteSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: siteTitle,
+    url: siteUrl,
+    author: {
+      "@type": "Person",
+      name: "Tim Brown",
+      alternateName: "brimtown",
+    },
+  };
+
   return (
     <html lang="en">
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(personSchema),
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(websiteSchema),
+          }}
+        />
+      </head>
       <body className={`${inter.variable}`}>
         {children}
         <Analytics />

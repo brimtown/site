@@ -93,8 +93,33 @@ export default async function PostPage({ params }: PostPageProps) {
     // Dynamic import of the MDX post
     const { default: Post, metadata } = await import(`@/posts/${slug}.mdx`);
 
+    const articleSchema = {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      headline: metadata.title,
+      description: metadata.subtitle,
+      datePublished: metadata.date,
+      author: {
+        "@type": "Person",
+        name: "Tim Brown",
+        alternateName: "brimtown",
+        url: "https://brimtown.com",
+      },
+      url: `https://brimtown.com/${slug}`,
+      mainEntityOfPage: {
+        "@type": "WebPage",
+        "@id": `https://brimtown.com/${slug}`,
+      },
+    };
+
     return (
       <article>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(articleSchema),
+          }}
+        />
         <header className={styles.postHeader}>
           <h1 className={styles.postTitle}>{metadata.title}</h1>
           {metadata.subtitle && (
@@ -106,7 +131,7 @@ export default async function PostPage({ params }: PostPageProps) {
               <a
                 href="https://x.com/_brimtown"
                 target="_blank"
-                rel="noopener noreferrer"
+                rel="noopener noreferrer me"
               >
                 @_brimtown
               </a>
