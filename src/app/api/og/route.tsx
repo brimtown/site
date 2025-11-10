@@ -10,7 +10,7 @@ export async function GET(request: Request) {
   const leftColumn = searchParams.get("leftColumn") || "";
   const rightColumn = searchParams.get("rightColumn") || "";
 
-  // Format date
+  // Format date (for backward compatibility with blog posts)
   let formattedDate = "";
   if (date) {
     const [year, month, day] = date.split("-").map(Number);
@@ -21,6 +21,12 @@ export async function GET(request: Request) {
       day: "numeric",
     });
   }
+
+  // Determine what to show in bottom columns
+  // leftColumn takes precedence, otherwise default to "by @_brimtown"
+  const displayLeftColumn = leftColumn || "by @_brimtown";
+  // rightColumn takes precedence, otherwise use formatted date if available
+  const displayRightColumn = rightColumn || formattedDate;
 
   // Fetch Inter fonts from jsdelivr (both weights we use)
   const [fontData400, fontData500] = await Promise.all([
@@ -36,7 +42,7 @@ export async function GET(request: Request) {
   const isDevelopment = process.env.NODE_ENV === "development";
   const cacheControl = isDevelopment
     ? "no-cache, no-store, must-revalidate"
-    : "public, immutable, max-age=31536000, s-maxage=31536000";
+    : "public, max-age=600, s-maxage=600"; // 10 minutes - bump later when styling is stable
 
   return new ImageResponse(
     (
@@ -57,10 +63,9 @@ export async function GET(request: Request) {
             fontWeight: 500,
             fontFamily: "Inter",
             color: "#0c0c0c",
-            marginBottom: 36,
             lineHeight: 1.2,
             letterSpacing: "-0.02em",
-            margin: 0,
+            margin: "0 0 24px 0",
           }}
         >
           {title}
@@ -70,7 +75,7 @@ export async function GET(request: Request) {
         {subtitle && (
           <p
             style={{
-              fontSize: 36,
+              fontSize: 40,
               fontFamily: "Inter",
               width: "68%",
               color: "rgba(12, 12, 12, 0.7)",
@@ -82,41 +87,45 @@ export async function GET(request: Request) {
           </p>
         )}
 
-        {/* Byline and date */}
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            width: "100%",
-            paddingBottom: "40px",
-            borderBottom: "12px solid rgba(0, 0, 0, 0.05)",
-          }}
-        >
+        {/* Bottom columns (flexible: byline/date or custom content) */}
+        {(displayLeftColumn || displayRightColumn) && (
           <div
             style={{
-              fontSize: 24,
-              fontWeight: 500,
-              fontFamily: "Inter",
-              color: "#0c0c0c",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              width: "100%",
+              paddingBottom: "40px",
+              borderBottom: "12px solid rgba(0, 0, 0, 0.05)",
             }}
           >
-            by @_brimtown
+            {displayLeftColumn && (
+              <div
+                style={{
+                  fontSize: 30,
+                  fontWeight: 500,
+                  fontFamily: "Inter",
+                  color: "#0c0c0c",
+                }}
+              >
+                {displayLeftColumn}
+              </div>
+            )}
+            {displayRightColumn && (
+              <div
+                style={{
+                  fontSize: 30,
+                  fontWeight: 500,
+                  fontFamily: "Inter",
+                  color: "rgba(12, 12, 12, 0.6)",
+                  letterSpacing: "0.02em",
+                }}
+              >
+                {displayRightColumn}
+              </div>
+            )}
           </div>
-          {formattedDate && (
-            <div
-              style={{
-                fontSize: 20,
-                fontWeight: 500,
-                fontFamily: "Inter",
-                color: "rgba(12, 12, 12, 0.6)",
-                letterSpacing: "0.02em",
-              }}
-            >
-              {formattedDate}
-            </div>
-          )}
-        </div>
+        )}
       </div>
     ),
     {

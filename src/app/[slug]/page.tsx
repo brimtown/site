@@ -22,6 +22,23 @@ function formatDate(dateString: string): string {
   });
 }
 
+function buildOgImageUrl(params: {
+  title: string;
+  subtitle?: string;
+  leftColumn?: string;
+  rightColumn?: string;
+  date?: string;
+}): string {
+  const queryParams = new URLSearchParams();
+  queryParams.set("title", params.title);
+  if (params.subtitle) queryParams.set("subtitle", params.subtitle);
+  if (params.leftColumn) queryParams.set("leftColumn", params.leftColumn);
+  if (params.rightColumn) queryParams.set("rightColumn", params.rightColumn);
+  if (params.date) queryParams.set("date", params.date);
+
+  return `/api/og?${queryParams.toString()}`;
+}
+
 // Generate metadata for social sharing
 export async function generateMetadata({ params }: PostPageProps): Promise<Metadata> {
   const { slug } = params;
@@ -29,7 +46,11 @@ export async function generateMetadata({ params }: PostPageProps): Promise<Metad
   try {
     const { metadata } = await import(`@/posts/${slug}.mdx`);
 
-    const ogImageUrl = `/api/og?title=${encodeURIComponent(metadata.title)}&subtitle=${encodeURIComponent(metadata.subtitle || '')}&date=${encodeURIComponent(metadata.date || '')}`;
+    const ogImageUrl = buildOgImageUrl({
+      title: metadata.title,
+      subtitle: metadata.subtitle || '',
+      date: metadata.date || '',
+    });
 
     return {
       title: metadata.title,

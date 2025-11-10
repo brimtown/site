@@ -1,7 +1,62 @@
 import Link from "next/link";
 import fs from "fs";
 import path from "path";
+import { Metadata } from "next";
 import styles from "./blog.module.css";
+
+const BLOG_TAGLINE = "Notes on AI product engineering, from the trenches";
+
+function buildOgImageUrl(params: {
+  title: string;
+  subtitle?: string;
+  leftColumn?: string;
+  rightColumn?: string;
+  date?: string;
+}): string {
+  const queryParams = new URLSearchParams();
+  queryParams.set("title", params.title);
+  if (params.subtitle) queryParams.set("subtitle", params.subtitle);
+  if (params.leftColumn) queryParams.set("leftColumn", params.leftColumn);
+  if (params.rightColumn) queryParams.set("rightColumn", params.rightColumn);
+  if (params.date) queryParams.set("date", params.date);
+
+  return `/api/og?${queryParams.toString()}`;
+}
+
+export async function generateMetadata(): Promise<Metadata> {
+  const ogImageUrl = buildOgImageUrl({
+    title: "Tim Brown - Blog",
+    subtitle: BLOG_TAGLINE,
+    leftColumn: "@brimtown",
+    rightColumn: "https://brimtown.com/blog",
+  });
+
+  return {
+    title: "Blog - Tim Brown",
+    description: BLOG_TAGLINE,
+    openGraph: {
+      title: "Blog",
+      description: BLOG_TAGLINE,
+      url: "https://brimtown.com/blog",
+      type: "website",
+      images: [
+        {
+          url: ogImageUrl,
+          width: 1200,
+          height: 630,
+          alt: "Blog - Tim Brown",
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: "Blog",
+      description: BLOG_TAGLINE,
+      creator: "@_brimtown",
+      images: [ogImageUrl],
+    },
+  };
+}
 
 async function getPosts() {
   const postsDirectory = path.join(process.cwd(), "src/posts");
