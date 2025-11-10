@@ -13,7 +13,8 @@ const inter = Inter({
 });
 
 const siteTitle = "Tim Brown";
-const siteDescription = "Tim is an experienced software engineer in New York who builds for the web.";
+const siteDescription =
+  "Tim is an experienced software engineer in New York who builds for the web.";
 const siteUrl = "https://brimtown.com";
 
 function buildOgImageUrl(params: {
@@ -36,7 +37,7 @@ function buildOgImageUrl(params: {
 const ogImageUrl = buildOgImageUrl({
   title: siteTitle,
   subtitle: siteDescription,
-  leftColumn: "@brimtown",
+  leftColumn: "@_brimtown",
   rightColumn: "https://brimtown.com",
 });
 

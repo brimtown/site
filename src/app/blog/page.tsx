@@ -27,7 +27,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const ogImageUrl = buildOgImageUrl({
     title: "Tim Brown - Blog",
     subtitle: BLOG_TAGLINE,
-    leftColumn: "@brimtown",
+    leftColumn: "_@brimtown",
     rightColumn: "https://brimtown.com/blog",
   });
 
