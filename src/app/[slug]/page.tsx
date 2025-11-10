@@ -41,21 +41,23 @@ function buildOgImageUrl(params: {
 }
 
 // Generate metadata for social sharing
-export async function generateMetadata({ params }: PostPageProps): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: PostPageProps): Promise<Metadata> {
   const { slug } = params;
 
   const metadata = await getPostMetadata(slug);
 
   if (!metadata) {
     return {
-      title: 'Post Not Found',
+      title: "Post Not Found",
     };
   }
 
   const ogImageUrl = buildOgImageUrl({
     title: metadata.title,
-    subtitle: metadata.subtitle || '',
-    date: metadata.date || '',
+    subtitle: metadata.subtitle || "",
+    date: metadata.date || "",
   });
 
   return {
@@ -64,9 +66,9 @@ export async function generateMetadata({ params }: PostPageProps): Promise<Metad
     openGraph: {
       title: metadata.title,
       description: metadata.subtitle,
-      type: 'article',
+      type: "article",
       publishedTime: metadata.date,
-      authors: ['@_brimtown'],
+      authors: ["@_brimtown"],
       url: `https://brimtown.com/${slug}`,
       images: [
         {
@@ -78,10 +80,10 @@ export async function generateMetadata({ params }: PostPageProps): Promise<Metad
       ],
     },
     twitter: {
-      card: 'summary_large_image',
+      card: "summary_large_image",
       title: metadata.title,
       description: metadata.subtitle,
-      creator: '@_brimtown',
+      creator: "@_brimtown",
       images: [ogImageUrl],
     },
   };
@@ -124,16 +126,19 @@ export default async function PostPage({ params }: PostPageProps) {
           }}
         />
         {!isPublished && (
-          <div style={{
-            background: '#fef3c7',
-            border: '2px solid #f59e0b',
-            borderRadius: '8px',
-            padding: '12px 16px',
-            marginBottom: '24px',
-            color: '#92400e',
-            fontWeight: 500,
-          }}>
-            ⚠️ This post is unpublished and not visible in the blog listing or sitemap
+          <div
+            style={{
+              background: "#fef3c7",
+              border: "2px solid #f59e0b",
+              borderRadius: "8px",
+              padding: "12px 16px",
+              marginBottom: "24px",
+              color: "#92400e",
+              fontWeight: 500,
+            }}
+          >
+            ⚠️ This post is unpublished and not visible in the blog listing or
+            sitemap
           </div>
         )}
         <header className={styles.postHeader}>
@@ -147,7 +152,7 @@ export default async function PostPage({ params }: PostPageProps) {
               <a
                 href="https://x.com/_brimtown"
                 target="_blank"
-                rel="noopener noreferrer me"
+                rel="noopener me"
               >
                 @_brimtown
               </a>
@@ -174,7 +179,7 @@ export default async function PostPage({ params }: PostPageProps) {
 export async function generateStaticParams() {
   // In production, only generate pages for published posts
   // In development, generate all posts for preview
-  const includeUnpublished = process.env.NODE_ENV === 'development';
+  const includeUnpublished = process.env.NODE_ENV === "development";
   const posts = await getAllPosts(includeUnpublished);
 
   return posts.map((post) => ({
