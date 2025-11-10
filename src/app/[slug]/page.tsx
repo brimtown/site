@@ -4,6 +4,7 @@ import fs from "fs";
 import path from "path";
 import styles from "./post.module.css";
 import mdxStyles from "@/styles/mdx-layout.module.css";
+import { getPostMetadata, getAllPosts } from "@/lib/posts";
 
 interface PostPageProps {
   params: {
@@ -37,29 +38,6 @@ function buildOgImageUrl(params: {
   if (params.date) queryParams.set("date", params.date);
 
   return `/api/og?${queryParams.toString()}`;
-}
-
-// Read metadata from MDX file without importing the component
-async function getPostMetadata(slug: string) {
-  const postsDirectory = path.join(process.cwd(), "src/posts");
-  const filePath = path.join(postsDirectory, `${slug}.mdx`);
-
-  try {
-    const fileContent = fs.readFileSync(filePath, "utf8");
-    // Extract metadata export using regex ([\s\S] matches any character including newlines)
-    const metadataMatch = fileContent.match(/export const metadata = \{([\s\S]+?)\};/);
-    if (!metadataMatch) {
-      return null;
-    }
-
-    // Parse the metadata object
-    const metadataStr = `{${metadataMatch[1]}}`;
-    // Use Function constructor to safely evaluate the object literal
-    const metadata = new Function(`return ${metadataStr}`)();
-    return metadata;
-  } catch (error) {
-    return null;
-  }
 }
 
 // Generate metadata for social sharing
@@ -135,6 +113,8 @@ export default async function PostPage({ params }: PostPageProps) {
       },
     };
 
+    const isPublished = metadata.published ?? false;
+
     return (
       <article>
         <script
@@ -143,6 +123,19 @@ export default async function PostPage({ params }: PostPageProps) {
             __html: JSON.stringify(articleSchema),
           }}
         />
+        {!isPublished && (
+          <div style={{
+            background: '#fef3c7',
+            border: '2px solid #f59e0b',
+            borderRadius: '8px',
+            padding: '12px 16px',
+            marginBottom: '24px',
+            color: '#92400e',
+            fontWeight: 500,
+          }}>
+            ⚠️ This post is unpublished and not visible in the blog listing or sitemap
+          </div>
+        )}
         <header className={styles.postHeader}>
           <h1 className={styles.postTitle}>{metadata.title}</h1>
           {metadata.subtitle && (
@@ -179,12 +172,12 @@ export default async function PostPage({ params }: PostPageProps) {
 
 // Generate static params for all posts at build time
 export async function generateStaticParams() {
-  const postsDirectory = path.join(process.cwd(), "src/posts");
-  const files = fs.readdirSync(postsDirectory);
+  // In production, only generate pages for published posts
+  // In development, generate all posts for preview
+  const includeUnpublished = process.env.NODE_ENV === 'development';
+  const posts = await getAllPosts(includeUnpublished);
 
-  return files
-    .filter((file) => file.endsWith(".mdx"))
-    .map((file) => ({
-      slug: file.replace(/\.mdx$/, ""),
-    }));
+  return posts.map((post) => ({
+    slug: post.slug,
+  }));
 }

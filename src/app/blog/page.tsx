@@ -1,8 +1,7 @@
 import Link from "next/link";
-import fs from "fs";
-import path from "path";
 import { Metadata } from "next";
 import styles from "./blog.module.css";
+import { getAllPosts } from "@/lib/posts";
 
 const BLOG_TAGLINE = "Notes on AI product engineering, from the trenches";
 
@@ -27,7 +26,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const ogImageUrl = buildOgImageUrl({
     title: "Tim Brown - Blog",
     subtitle: BLOG_TAGLINE,
-    leftColumn: "_@brimtown",
+    leftColumn: "@_brimtown",
     rightColumn: "https://brimtown.com/blog",
   });
 
@@ -58,29 +57,6 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-async function getPosts() {
-  const postsDirectory = path.join(process.cwd(), "src/posts");
-  const files = fs.readdirSync(postsDirectory);
-
-  const posts = await Promise.all(
-    files
-      .filter((file) => file.endsWith(".mdx"))
-      .map(async (file) => {
-        const slug = file.replace(/\.mdx$/, "");
-        const { metadata } = await import(`@/posts/${slug}.mdx`);
-
-        return {
-          slug,
-          title: metadata?.title || slug,
-          subtitle: metadata?.subtitle || "",
-          date: metadata?.date || "",
-        };
-      })
-  );
-
-  // Sort by date, newest first
-  return posts.sort((a, b) => (a.date < b.date ? 1 : -1));
-}
 
 function formatDate(dateString: string): string {
   const [year, month, day] = dateString.split("-").map(Number);
@@ -109,7 +85,8 @@ function groupPostsByYear(posts: any[]) {
 }
 
 export default async function BlogList() {
-  const posts = await getPosts();
+  // Only show published posts
+  const posts = await getAllPosts(false);
   const postsByYear = groupPostsByYear(posts);
   const years = Object.keys(postsByYear).sort((a, b) => Number(b) - Number(a));
 

@@ -1,16 +1,11 @@
 import { MetadataRoute } from "next";
-import fs from "fs";
-import path from "path";
+import { getAllPosts } from "@/lib/posts";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = "https://brimtown.com";
 
-  // Get all blog post slugs
-  const postsDirectory = path.join(process.cwd(), "src/posts");
-  const files = fs.readdirSync(postsDirectory);
-  const postSlugs = files
-    .filter((file) => file.endsWith(".mdx"))
-    .map((file) => file.replace(/\.mdx$/, ""));
+  // Get all published blog posts
+  const posts = await getAllPosts(false);
 
   // Static pages
   const staticPages = [
@@ -34,9 +29,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   ];
 
-  // Blog post pages
-  const blogPosts = postSlugs.map((slug) => ({
-    url: `${baseUrl}/${slug}`,
+  // Blog post pages (only published posts)
+  const blogPosts = posts.map((post) => ({
+    url: `${baseUrl}/${post.slug}`,
     lastModified: new Date(),
     changeFrequency: "monthly" as const,
     priority: 0.7,
