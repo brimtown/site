@@ -39,51 +39,74 @@ function buildOgImageUrl(params: {
   return `/api/og?${queryParams.toString()}`;
 }
 
+// Read metadata from MDX file without importing the component
+async function getPostMetadata(slug: string) {
+  const postsDirectory = path.join(process.cwd(), "src/posts");
+  const filePath = path.join(postsDirectory, `${slug}.mdx`);
+
+  try {
+    const fileContent = fs.readFileSync(filePath, "utf8");
+    // Extract metadata export using regex ([\s\S] matches any character including newlines)
+    const metadataMatch = fileContent.match(/export const metadata = \{([\s\S]+?)\};/);
+    if (!metadataMatch) {
+      return null;
+    }
+
+    // Parse the metadata object
+    const metadataStr = `{${metadataMatch[1]}}`;
+    // Use Function constructor to safely evaluate the object literal
+    const metadata = new Function(`return ${metadataStr}`)();
+    return metadata;
+  } catch (error) {
+    return null;
+  }
+}
+
 // Generate metadata for social sharing
 export async function generateMetadata({ params }: PostPageProps): Promise<Metadata> {
   const { slug } = params;
 
-  try {
-    const { metadata } = await import(`@/posts/${slug}.mdx`);
+  const metadata = await getPostMetadata(slug);
 
-    const ogImageUrl = buildOgImageUrl({
-      title: metadata.title,
-      subtitle: metadata.subtitle || '',
-      date: metadata.date || '',
-    });
-
-    return {
-      title: metadata.title,
-      description: metadata.subtitle,
-      openGraph: {
-        title: metadata.title,
-        description: metadata.subtitle,
-        type: 'article',
-        publishedTime: metadata.date,
-        authors: ['@_brimtown'],
-        url: `https://brimtown.com/${slug}`,
-        images: [
-          {
-            url: ogImageUrl,
-            width: 1200,
-            height: 630,
-            alt: metadata.title,
-          },
-        ],
-      },
-      twitter: {
-        card: 'summary_large_image',
-        title: metadata.title,
-        description: metadata.subtitle,
-        creator: '@_brimtown',
-        images: [ogImageUrl],
-      },
-    };
-  } catch (error) {
+  if (!metadata) {
     return {
       title: 'Post Not Found',
     };
   }
+
+  const ogImageUrl = buildOgImageUrl({
+    title: metadata.title,
+    subtitle: metadata.subtitle || '',
+    date: metadata.date || '',
+  });
+
+  return {
+    title: metadata.title,
+    description: metadata.subtitle,
+    openGraph: {
+      title: metadata.title,
+      description: metadata.subtitle,
+      type: 'article',
+      publishedTime: metadata.date,
+      authors: ['@_brimtown'],
+      url: `https://brimtown.com/${slug}`,
+      images: [
+        {
+          url: ogImageUrl,
+          width: 1200,
+          height: 630,
+          alt: metadata.title,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: metadata.title,
+      description: metadata.subtitle,
+      creator: '@_brimtown',
+      images: [ogImageUrl],
+    },
+  };
 }
 
 export default async function PostPage({ params }: PostPageProps) {
