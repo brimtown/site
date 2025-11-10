@@ -77,9 +77,9 @@ export async function GET(request: Request) {
             style={{
               fontSize: 40,
               fontFamily: "Inter",
-              width: "68%",
+              width: "70%",
               color: "rgba(12, 12, 12, 0.7)",
-              margin: "0 0 60px 0",
+              margin: "0 0 80px 0",
               lineHeight: 1.4,
             }}
           >
@@ -96,13 +96,12 @@ export async function GET(request: Request) {
               alignItems: "center",
               width: "100%",
               paddingBottom: "40px",
-              borderBottom: "12px solid rgba(0, 0, 0, 0.05)",
             }}
           >
             {displayLeftColumn && (
               <div
                 style={{
-                  fontSize: 30,
+                  fontSize: 36,
                   fontWeight: 500,
                   fontFamily: "Inter",
                   color: "#0c0c0c",
@@ -114,7 +113,7 @@ export async function GET(request: Request) {
             {displayRightColumn && (
               <div
                 style={{
-                  fontSize: 30,
+                  fontSize: 36,
                   fontWeight: 500,
                   fontFamily: "Inter",
                   color: "rgba(12, 12, 12, 0.6)",
