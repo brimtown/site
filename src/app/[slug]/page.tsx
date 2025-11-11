@@ -4,7 +4,7 @@ import fs from "fs";
 import path from "path";
 import styles from "./post.module.css";
 import mdxStyles from "@/styles/mdx-layout.module.css";
-import { getPostMetadata, getAllPosts } from "@/lib/posts";
+import { getPostMetadata, getAllPosts, calculateReadingTime } from "@/lib/posts";
 
 interface PostPageProps {
   params: {
@@ -96,6 +96,12 @@ export default async function PostPage({ params }: PostPageProps) {
     // Dynamic import of the MDX post
     const { default: Post, metadata } = await import(`@/posts/${slug}.mdx`);
 
+    // Read the MDX file to calculate reading time
+    const postsDirectory = path.join(process.cwd(), "src/posts");
+    const filePath = path.join(postsDirectory, `${slug}.mdx`);
+    const fileContent = fs.readFileSync(filePath, "utf8");
+    const readingTime = calculateReadingTime(fileContent);
+
     const articleSchema = {
       "@context": "https://schema.org",
       "@type": "BlogPosting",
@@ -157,11 +163,14 @@ export default async function PostPage({ params }: PostPageProps) {
                 @_brimtown
               </a>
             </span>
-            {metadata.date && (
-              <time className={styles.postDate}>
-                {formatDate(metadata.date)}
-              </time>
-            )}
+            <div className={styles.postInfo}>
+              {metadata.date && (
+                <time className={styles.postDate}>
+                  {formatDate(metadata.date)}
+                </time>
+              )}
+              <span className={styles.readTime}>{readingTime} min read</span>
+            </div>
           </div>
         </header>
         <div className={mdxStyles.mdxContent}>

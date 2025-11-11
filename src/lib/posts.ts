@@ -9,6 +9,34 @@ export interface PostMetadata {
 }
 
 /**
+ * Calculate reading time in minutes based on word count.
+ * Average reading speed: 200 words per minute.
+ */
+export function calculateReadingTime(content: string): number {
+  // Remove code blocks
+  const withoutCodeBlocks = content.replace(/```[\s\S]*?```/g, "");
+  // Remove inline code
+  const withoutInlineCode = withoutCodeBlocks.replace(/`[^`]+`/g, "");
+  // Remove imports and exports
+  const withoutImports = withoutInlineCode.replace(/^import\s+.+$/gm, "");
+  const withoutExports = withoutImports.replace(/^export\s+.+$/gm, "");
+  // Remove HTML/JSX tags
+  const withoutTags = withoutExports.replace(/<[^>]+>/g, "");
+  // Remove URLs
+  const withoutUrls = withoutTags.replace(/https?:\/\/[^\s]+/g, "");
+
+  // Count words
+  const words = withoutUrls
+    .split(/\s+/)
+    .filter((word) => word.length > 0).length;
+
+  // Calculate reading time (200 words per minute, minimum 1 minute)
+  const minutes = Math.max(1, Math.ceil(words / 200));
+
+  return minutes;
+}
+
+/**
  * Read metadata from an MDX file without importing the component.
  * This avoids serialization issues during static generation.
  */
