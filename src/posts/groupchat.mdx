@@ -1,7 +1,7 @@
 import { ChatExample, Speaker } from '@/components/blog/ChatExample';
 
 export const metadata = {
-  title: 'Quantize Your Groupchat',
+  title: 'Train on Your Groupchat',
   subtitle: 'Using LoRA and in-browser inference to fine-tune your friends',
   date: '2025-11-12',
   published: true,
@@ -39,7 +39,7 @@ Recently, one of those friends suggested revisiting the project using the past f
 
 A few forces came together in late 2025 to make this timely:
 
-1. A bounty of small, quality open source models: particularly the latest Qwen series  
+1. A bounty of small, high-quality open models: particularly the latest Qwen series  
 2. Growing interest in fine-tuning and LoRA - [John Schulman’s LoRA blogpost](https://thinkingmachines.ai/blog/lora/) in particular was a motivator
 3. Safari shipping WebGPU by default in iOS26, allowing us to run sufficiently small models on phones
 
@@ -85,7 +85,7 @@ After processing my scraped groupchat data into ChatML JSON format (one of sever
 
       Recent messages:
       Tim: please add me @timeclown
-      Niccolo: The 24hr says hello
+      Niccolo: what is this shit
       Spencer: Yo is nutty
       Tim: Yo is the future. Embrace yo
       Tim: 1 bit communication fuck language fuck word traps just yo
@@ -94,7 +94,7 @@ After processing my scraped groupchat data into ChatML JSON format (one of sever
     },
     {
       "role": "assistant",
-      "content": "Communication reduced to intent"
+      "content": "Yo is too powerful"
     }
   ]
 }
@@ -271,7 +271,7 @@ I realized late on that I could even run a model this small in my phone’s brow
 ## Crashing out in the browser
 On mobile, I saw frequent crashes with Qwen3 0.6B that seemed to imply serious memory pressure, so I did one last training run with Qwen2.5 0.5B.
 
-Dropping the extra 100M parameters was just enough to keep the tab using less than a 1GB of memory on iOS, a threshold I found on this [Github issue](https://github.com/mlc-ai/web-llm/issues/386#issuecomment-2207631803). This ended up being the default model (“Mobile”) that I shipped, but the whole family ([Groupchat 4B](https://huggingface.co/brimtown/Groupchat-Qwen3-4B-MLC), [Groupchat 0.6B](https://huggingface.co/brimtown/Groupchat-Qwen3-0.6B-MLC), and [Groupchat 0.5B](https://huggingface.co/brimtown/Groupchat-Qwen2.5-0.5B-MLC)) are selectable in the app.
+Dropping the extra 100M parameters was just enough to keep the tab using less than 1GB of memory on iOS, a threshold I found on this [Github issue](https://github.com/mlc-ai/web-llm/issues/386#issuecomment-2207631803). This ended up being the default model (“Mobile”) that I shipped, but the whole family ([Groupchat 4B](https://huggingface.co/brimtown/Groupchat-Qwen3-4B-MLC), [Groupchat 0.6B](https://huggingface.co/brimtown/Groupchat-Qwen3-0.6B-MLC), and [Groupchat 0.5B](https://huggingface.co/brimtown/Groupchat-Qwen2.5-0.5B-MLC)) are selectable in the app.
 
 ## A few more features
 It’s still not all roses. The app does still crash on phones due to memory pressure, so we persist the conversation in browser localStorage to allow quick resumption after refresh.
@@ -311,4 +311,4 @@ If we can [ship a database](https://www.notion.com/blog/how-we-sped-up-notion-in
 
 **Acknowledgements**
 
-Thanks to Brian Cobb, Vikram Oberoi, Abe Rubenstein, Ali Mahmoud, and Patrick Lee for their feedback on this post.
+Thanks to Brian Cobb, Vikram Oberoi, Abe Rubenstein, Ali Mahmoud, and Patrick Lee for their feedback.
