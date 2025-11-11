@@ -57,7 +57,6 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-
 function formatDate(dateString: string): string {
   const [year, month, day] = dateString.split("-").map(Number);
   const date = new Date(year, month - 1, day);
@@ -118,7 +117,13 @@ export default async function BlogList() {
                         )}
                       </Link>
                     </td>
-                    <td className={styles.dateCell}>{formatDate(post.date)}</td>
+                    <td className={styles.dateCell}>
+                      <Link href={`/${post.slug}`} className={styles.rowLink}>
+                        <span className={styles.date}>
+                          {formatDate(post.date)}
+                        </span>
+                      </Link>
+                    </td>
                   </tr>
                 ))}
               </tbody>
