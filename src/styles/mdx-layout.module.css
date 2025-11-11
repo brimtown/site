@@ -181,6 +181,10 @@
   margin: 0;
 }
 
+.mdxContent figure video {
+  margin: 0;
+}
+
 .mdxContent figure pre {
   margin-bottom: 0;
 }

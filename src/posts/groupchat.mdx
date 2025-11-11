@@ -1,17 +1,27 @@
 import { ChatExample, Speaker } from '@/components/blog/ChatExample';
 
 export const metadata = {
-  title: 'The Groupchat, Quantized',
+  title: 'Quantize Your Groupchat',
   subtitle: 'Using LoRA and in-browser inference to fine-tune your friends',
   date: '2025-11-12',
   published: true,
 };
 
-> You can jump in here: <a href="https://groupme-web.vercel.app" target="_blank" rel="noopener">infinitegroupchat.com<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ display: 'inline-block', marginLeft: '0.25em', verticalAlign: 'middle', marginBottom: '2px' }}><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" /><polyline points="15 3 21 3 21 9" /><line x1="10" x2="21" y1="14" y2="3" /></svg></a><br />
+> You can jump in here: <a href="https://infinitegroupchat.com" target="_blank" rel="noopener">infinitegroupchat.com<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ display: 'inline-block', marginLeft: '0.25em', verticalAlign: 'middle', marginBottom: '2px' }}><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" /><polyline points="15 3 21 3 21 9" /><line x1="10" x2="21" y1="14" y2="3" /></svg></a><br />
 >
 > Note: Requires WebGPU / iOS26
 
-I made an LLM read 50,000 messages from my college groupchat. It runs on a phone.
+I made an LLM read 50,000 messages from my college groupchat.
+
+It runs on a phone.
+
+<figure>
+<video controls loop autoPlay muted playsInline preload="metadata" style={{ width: '100%', maxWidth: '100%', height: 'auto', margin: '0 0 0 0' }}>
+  <source src="/videos/groupchat-demo.mp4" type="video/mp4" />
+  Your browser does not support the video tag.
+</video>
+<figcaption><a href="https://infinitegroupchat.com" target="_blank" rel="noopener">infinitegroupchat.com</a></figcaption>
+</figure>
 
 ## How did we get here?
 
@@ -38,13 +48,13 @@ Working within these themes, I set out to fine-tune my own language model and bu
 
 ## Picking a model
 
-I knew up front that I wanted to fine-tune instead of using RAG. This was partly for the learning experience, but also because it felt like fine-tuning would be more akin to the original Markov chain approach than a RAG-based one would’ve been.
+I knew up front that I wanted to fine-tune instead of using RAG. This was partly for the learning experience, but also because fine-tuning felt more akin to the original Markov chain approach than a RAG-based pipeline would’ve been.
 
-At work, my team had [fine-tuned Llama 3 using LoRA](https://x.com/_brimtown/status/1979669362232463704) to good success on a variant of text-to-SQL. My colleague [Patrick](https://patricklee.nyc/) spoke highly of [Unsloth’s notebooks](https://docs.unsloth.ai/get-started/unsloth-notebooks) for fine-tuning, so I started there.
+At [work](https://datadoghq.com), my team had used LoRA to [fine-tune Llama 3](https://x.com/_brimtown/status/1979669362232463704) to good success on a variant of text-to-SQL. My colleague [Patrick](https://patricklee.nyc/) spoke highly of [Unsloth’s notebooks](https://docs.unsloth.ai/get-started/unsloth-notebooks) for fine-tuning, so I started there.
 
 I sensed that I could use a very small language model by 2025 standards and still get decent results. The smallest Qwen model I initially saw in Unsloth’s notebooks was Qwen3 4B, so I picked that one mostly on vibes.
 
-I did briefly consider using a base model instead of an instruct-tuned model. A base model felt even more similar to the Markov approach of purely learning sequences, but I went with the instruct model for convenience. Here’s the prompt I chose to train with:
+I did briefly consider using a [base model](https://docs.unsloth.ai/get-started/fine-tuning-llms-guide/what-model-should-i-use#instruct-or-base-model) instead of an instruct-tuned model. A base model felt even more similar to the Markov approach of purely learning sequences, but I went with the instruct model for convenience. Here’s the prompt I chose to train with:
 
 ```
 You are mimicking users in a group chat.
@@ -135,7 +145,7 @@ I ran inference manually in Colab for a while, switching back to a T4 instead of
 
 Beyond simulating conversations, I added a few other quality of life features like the ability to hardcode different speakers (i.e. force Tim to monologue, or a conversation between two folks), and pre-filling conversations.
 
-I fiddled with the temperature, `top_p`, and `top_k` params until the vibe was dialed in. I also added the ability to send (human) messages to the chat, so you too could be a member of this cursed chat.
+I fiddled with the temperature, `top_p`, and `top_k` params until the vibe was dialed in. I also added the ability for human users to send messages, so you too could be a member of this cursed chat.
 
 I sent screenshots to my friends as I went, and took requests for conversation topics for our little ant farm to have. Everyone mostly wanted to see themselves talk, and to just watch the tangents that the sim-chat got fixated on:
 
@@ -163,7 +173,7 @@ We use [vLLM](https://docs.vllm.ai/en/latest/) for inference at work, but that f
 I found myself searching for things like "host .gguf" and perusing threads on the [/r/LocalLLaMA](https://www.reddit.com/r/LocalLLaMA/) subreddit. Most questions there had less-than-satisfying answers.
 
 <figure>
-  <img src="/images/groupchat-reddit-hosting.webp" alt="Reddit thread asking where to host fine tuned model" />
+  <img src="/images/groupchat-hosting-540.webp" alt="Reddit thread asking where to host fine tuned model" />
   <figcaption>Wherein the top comment is just ["Server"](https://www.reddit.com/r/LocalLLaMA/comments/1kh4joc/where_are_you_hosting_your_fine_tuned_model/)</figcaption>
 </figure>
 
@@ -201,7 +211,7 @@ I restarted training from scratch with the 0.6B model, which was as simple as ch
 These were fairly unprincipled guesses - the latter (overtraining on duplicate data) ultimately seemed like it fried the model.
 
 <figure>
-  <img src="/images/groupchat-fried.webp" alt="Overtrained model output showing nonsensical repeated text" />
+  <img src="/images/groupchat-fried-540.webp" alt="Overtrained model output showing nonsensical repeated text" />
   <figcaption>bro is cooked</figcaption>
 </figure>
 
@@ -252,7 +262,7 @@ export async function createAppConfig() {
 
 ## The final web app
 
-Other than the “language model in the browser” part, [the resulting web app](https://groupme-web.vercel.app/) is dead simple. It started as a single HTML file with vanilla JS, and only at the very end did I port it to Vite and React.
+Other than the “language model in the browser” part, [the resulting web app](https://infinitegroupchat.com/) is dead simple. It started as a single HTML file with vanilla JS, and only at the very end did I port it to Vite and React.
 
 The app is client-side rendered and served with static assets on Vercel. The model weights themselves (~250MB) are also static assets, being served from HuggingFace’s CDN at initial load, and subsequently from a browser cache.
 
@@ -271,6 +281,11 @@ This tiny, fried model also not infrequently outputs Chinese characters (Qwen is
 On the plus side, generation speed is not an issue with the smallest model; I even added a toggleable delay feature to slow things down.
 
 Lastly, I added a “Group Topic” feature that is just injected into the prompt, instructing the target speaker to “talk ONLY about [GroupTopic]”.
+
+<figure>
+  <img src="/images/groupchat-features-440.webp" alt="Screenshot of settings panel for infinitegroupchat.com" />
+  <figcaption>Settings tab in the app</figcaption>
+</figure>
 
 ## Local-first LLM apps
 
@@ -296,4 +311,4 @@ If we can [ship a database](https://www.notion.com/blog/how-we-sped-up-notion-in
 
 **Acknowledgements**
 
-Thanks to Ali Mahmoud, Abe Rubenstein, Patrick Lee, Vikram Oberoi, Brian Cobb, and Mae Capozzi for their feedback on this post.
+Thanks to Brian Cobb, Vikram Oberoi, Abe Rubenstein, Ali Mahmoud, and Patrick Lee for their feedback on this post.
