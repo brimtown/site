@@ -60,6 +60,8 @@ export async function generateMetadata({
     date: metadata.date || "",
   });
 
+  const absoluteOgImageUrl = `https://brimtown.com${ogImageUrl}`;
+
   return {
     title: metadata.title,
     description: metadata.subtitle,
@@ -72,7 +74,7 @@ export async function generateMetadata({
       url: `https://brimtown.com/${slug}`,
       images: [
         {
-          url: ogImageUrl,
+          url: absoluteOgImageUrl,
           width: 1200,
           height: 630,
           alt: metadata.title,
@@ -84,7 +86,7 @@ export async function generateMetadata({
       title: metadata.title,
       description: metadata.subtitle,
       creator: "@_brimtown",
-      images: [ogImageUrl],
+      images: [absoluteOgImageUrl],
     },
   };
 }
