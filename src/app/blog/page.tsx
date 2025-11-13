@@ -30,6 +30,8 @@ export async function generateMetadata(): Promise<Metadata> {
     rightColumn: "https://brimtown.com/blog",
   });
 
+  const absoluteOgImageUrl = `https://brimtown.com${ogImageUrl}`;
+
   return {
     title: "Blog - Tim Brown",
     description: BLOG_TAGLINE,
@@ -40,7 +42,7 @@ export async function generateMetadata(): Promise<Metadata> {
       type: "website",
       images: [
         {
-          url: ogImageUrl,
+          url: absoluteOgImageUrl,
           width: 1200,
           height: 630,
           alt: "Blog - Tim Brown",
@@ -52,7 +54,7 @@ export async function generateMetadata(): Promise<Metadata> {
       title: "Blog",
       description: BLOG_TAGLINE,
       creator: "@_brimtown",
-      images: [ogImageUrl],
+      images: [absoluteOgImageUrl],
     },
   };
 }

@@ -41,6 +41,8 @@ const ogImageUrl = buildOgImageUrl({
   rightColumn: "https://brimtown.com",
 });
 
+const absoluteOgImageUrl = `${siteUrl}${ogImageUrl}`;
+
 export const metadata: Metadata = {
   title: siteTitle,
   description: siteDescription,
@@ -55,7 +57,7 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: ogImageUrl,
+        url: absoluteOgImageUrl,
         width: 1200,
         height: 630,
         alt: siteTitle,
@@ -67,7 +69,7 @@ export const metadata: Metadata = {
     title: siteTitle,
     description: siteDescription,
     creator: "@_brimtown",
-    images: [ogImageUrl],
+    images: [absoluteOgImageUrl],
   },
 };
 
